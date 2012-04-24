@@ -12,3 +12,15 @@ exports.index = function(req, res){
 	});	
 	
 };
+
+exports.create = function(req, res){
+	var uid = req.param('uid');
+	var name = req.param('name');
+	console.info('uid = ' + uid + ', name = ' + name);
+	res.contentType('application/json');
+	res.json('{"result": "ok"} ');
+	//var redis = require("redis"), client = redis.createClient(6379, "172.16.102.46", null);
+	//client.set("jz:uid:", "redis");
+		
+	
+};

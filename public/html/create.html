@@ -4,18 +4,42 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title></title>
 <script type="text/javascript" src="../js/jquery-1.7.min.js"></script>
+<script type="text/javascript" src="../js/yyapi-1.1.js"></script>
 <!-- <link type="text/css" rel="stylesheet" href="../../js/udbsdk/layerclose/layerclose.css"/> -->
 <style type="text/css">
 
 </style>
 <script type="text/javascript">
+var tar_uid, cid;
 $(function(){
-	$('.create').click(function(){
-		console.info('create');
-		$.ajax({dataType : 'json', type : 'POST', url : '/create', data : {uid : ''}, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+	yy.channel.userListPopMenu.setPopMenu('贴纸条');
+
+	yy.channel.userListPopMenu.addEventListener(IYYChannelUserListPopMenu.CLICKED,onClicked);
+
+	function onClicked(eventData)
+	{	
+		$('.nick').val(yy.user.getUserInfo(eventData.uid).nick);
+		tar_uid = eventData.uid;
+		$('#uid').val(eventData.uid);
+		cid = eventData.cid;
+		$('#cid').val(eventData.cid);
+		$('.create').after('用户'+eventData.uid+"菜单被点击,当前频道"+eventData.cid);
+	}
+
+	$('.create').click(function(){		
+		var content = $('#content').val();
+		var src_uid = yy.user.getCurrentUserInfo().uid;		
+		$.ajax({dataType : 'json', type : 'POST', url : '/create', data : {src_uid : src_uid, content : content, tar_uid : tar_uid, cid : cid }, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 			success : function(data){
-				console.info(data);
-				
+				//$('.create').after( typeof data);
+				if(data.result == 0){
+					$('.create').after('<div>已经悄悄地贴在了他的身上</div>');
+				}else{
+					$('.create').after('<div>服务器出错</div>');
+				}
+			}
+			,error : function(){
+				$('.create').after('<div>服务器出错</div>');
 			}
 		});
 	});
@@ -24,10 +48,12 @@ $(function(){
 </head>
 <body>
 <h1>还记得童年时给前桌同学背后贴过的纸条吗？</h1>
+<h3>去看看用户列表右键菜单里，有个“应用互动” -> “贴纸条”木有？</h3>
 <label for="nick">你想贴的人：</label><input type="text" id="nick" class="nick"/>
-<input name="uid" type="hidden" value=""/>
+<input id="uid" name="uid" type="hidden" value=""/>
+<input id="cid" name="cid" type="hidden" value=""/>
 <p/>
-<label for="name">内容...</label><textarea id="name" >最多输入20个字</textarea>
+<label for="content">内容...</label><textarea id="content" name="content">最多输入20个字</textarea>
 <p/>
 <input class="create" type="button" value="贴上去"/>	
 </body>

@@ -10,25 +10,26 @@
 
 </style>
 <script type="text/javascript">
-var tar_uid, cid;
+var src_uid, tar_uid, cid;
 $(function(){
 	yy.channel.userListPopMenu.setPopMenu('贴纸条');
 
 	yy.channel.userListPopMenu.addEventListener(IYYChannelUserListPopMenu.CLICKED,onClicked);
-
+	
+	//$('.create').after("getUserInfo=" + yy.user.getUserInfo('339959').name);
+	cid = yy.channel.getCurrentChannelInfo().longId;
+	
 	function onClicked(eventData)
 	{	
-		$('.nick').val(yy.user.getUserInfo(eventData.uid).nick);
-		tar_uid = eventData.uid;
-		$('#uid').val(eventData.uid);
-		cid = eventData.cid;
-		$('#cid').val(eventData.cid);
-		$('.create').after('用户'+eventData.uid+"菜单被点击,当前频道"+eventData.cid);
+		$('.nick').val(yy.user.getUserInfo(eventData.uid).name);		
+		tar_uid = eventData.uid;		
+		//cid = eventData.cid;		
+		//$('.create').after('用户'+eventData.uid+"菜单被点击,当前频道"+eventData.cid);
 	}
 
 	$('.create').click(function(){		
 		var content = $('#content').val();
-		var src_uid = yy.user.getCurrentUserInfo().uid;		
+		src_uid = yy.user.getCurrentUserInfo().uid;		
 		$.ajax({dataType : 'json', type : 'POST', url : '/create', data : {src_uid : src_uid, content : content, tar_uid : tar_uid, cid : cid }, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 			success : function(data){
 				//$('.create').after( typeof data);
@@ -43,15 +44,26 @@ $(function(){
 			}
 		});
 	});
+	
+	$('.nick').keyup(function(e){
+		var key = e.which;
+		window.textTimeout = setTimeout(function(){
+			if(window.textTimeout) clearTimeout(window.textTimeout);
+			window.yyid = $(this).val();
+			queryYYInfo();
+		}, 200);
+	});
+	
+	function queryYYInfo(){
+		
+	}
 });
 </script>
 </head>
 <body>
 <h1>还记得童年时给前桌同学背后贴过的纸条吗？</h1>
-<h3>去看看用户列表右键菜单里，有个“应用互动” -> “贴纸条”木有？</h3>
+<h3>去点击频道列表中，用户右键菜单里的“应用互动” -> “贴纸条”吧</h3>
 <label for="nick">你想贴的人：</label><input type="text" id="nick" class="nick"/>
-<input id="uid" name="uid" type="hidden" value=""/>
-<input id="cid" name="cid" type="hidden" value=""/>
 <p/>
 <label for="content">内容...</label><textarea id="content" name="content">最多输入20个字</textarea>
 <p/>

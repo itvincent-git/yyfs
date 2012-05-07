@@ -1,0 +1,41 @@
+﻿!!! 5
+html 
+	head
+		title 1
+		link(rel='stylesheet', href='../css/jScrollPane.css')
+		link(rel='stylesheet', href='../css/index.css')
+		script(src="../js/jquery.min.js")
+		script(src="../js/jquery.mousewheel.js")
+		script(src="../js/jScrollPane.js")
+		script.
+			$(function(){
+				// 初始化滚动条
+				$('#main').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});
+				
+				$("#main .item").mouseenter(function(){
+					
+				});
+			})
+
+	body.
+		<div class="wrap">
+			<div class="content">
+				<div class="main" id="main">
+					<div class="item" style="font-size:14px; line-height:22px;">无敌清新小美女</div>
+					<div class="item big">无敌清新小美女无敌清新小美女无敌清新小美女无敌清新小美女</div>
+					<div class="item"></div>
+					<div class="item"></div>
+					<div class="item"></div>
+					<div class="item"></div>
+					<div class="item big"></div>
+					<div class="item"></div>
+					<div class="item"></div>
+					<div class="item"></div>
+					<div class="item"></div>
+					<div class="item big"></div>
+					<div class="item big"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="tips" style="left:480px; top:170px;"><span class="arrow"></span><span class="name">─╄OvЁ 酒窝</span>给<span class="name">红颜皆祸水</span>贴的纸条</div>

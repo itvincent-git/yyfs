@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<link type="text/css" rel="stylesheet" href="../../js/udbsdk/layerclose/layerclose.css"/>
+<style type="text/css">
+
+</style>
+<script type="text/javascript">
+$(function(){
+	$('.create').click(function(){
+		console.info('create');
+		$.ajax({dataType : 'json', type : 'POST', url : '../jz_create', data : {uid : ''}, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+			success : function(data){
+				console.info(data);
+				
+			}
+		});
+	});
+});
+</script>
+</head>
+<body>
+<h1>建立家族</h1>
+<label for="nick">申请人：</label><span id="nick" class="nick"></span>
+<input name="uid" type="hidden" value=""/>
+<p/>
+<label for="name">家族名称：</label><input id="name" type="text" value=""/>	
+<p/>
+<input class="create" type="button" value="建立"/>	
+</body>
+</html>

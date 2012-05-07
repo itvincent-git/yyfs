@@ -1,0 +1,10 @@
+app.configure(function(){
+    app.set("views", __dirname + "/views");
+    app.set("view engine", "html");
+    app.register(".html", {
+        compile: function(str, options){
+            return function(locals){
+                return str;
+            };
+        }
+    }); // 指向html模板

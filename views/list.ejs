@@ -1,0 +1,71 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>贴纸条</title>
+<link type="text/css" rel="stylesheet" href="../css/jScrollPane.css" />
+<style type="text/css">
+body {margin:0 auto; padding:0;text-decoration: none; font-size:12px;font-family:Arial,Verdana, Helvetica, sans-serif; color:#5c4625;}
+* { margin: 0; padding: 0; }
+a{ outline:none; text-decoration:none;}
+
+ h1, h2, h3, h4{ margin: 0; padding:0; font-size:18px;}
+ img{ border:none;-ms-interpolation-mode: bicubic; }
+ ul,li,dl,dt,dd,form{ margin:0; padding:0; list-style:none;}
+
+.clear { clear:both; float:none; height:1px; overflow:hidden;} 
+.clearfix { height:0;clear:both;float:none;overflow:hidden;width:100%;}
+/*.wrap{ width:763px; height:697px; background:#e5d8c2;}*/
+
+.content{ width:500px; height:330px; background:url(../images/body_bg.jpg) no-repeat; margin:0 auto; padding:90px 0 0 0;}
+.main{width:500px;height:330px; font-family:"微软雅黑" ;}
+.content .item{background:url(../images/sticker_bg.png) no-repeat!important; background:none; 
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/sticker_bg.png' ,sizingMethod='crop'); width:68px; height:52px; padding:20px 10px;text-align:center; overflow:hidden; float:left; display:inline; margin:0 10px 10px 10px;}
+.content .big{background:url(../images/sticker_bg_big.png) no-repeat!important; background:none; 
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/sticker_bg_big.png' ,sizingMethod='crop'); width:110px; height:87px; padding:25px 20px 25px 10px;}
+
+/*滚动条*/
+.content .jScrollPaneDrag {background:url(../images/drag_middle.gif) repeat-y;}
+.content .jScrollPaneDragTop {background:url(../images/drag_top.gif) no-repeat;height:10px;}
+.content .jScrollPaneDragBottom {background:url(../images/drag_bottom.gif) no-repeat;height:10px;}
+
+.content .jScrollPaneDragHover{background:url(../images/drag_middle.gif) repeat-y;}
+.content .jScrollPaneDragTopHover{background:url(../images/drag_top.gif) no-repeat;height:10px;}
+.content .jScrollPaneDragBottomHover{background:url(../images/drag_bottom.gif) no-repeat;height:10px;}
+
+.tips{ position:absolute; left:0; top:0; border:1px #b89d73 solid; background:#d4bc96; width:110px; padding:5px; height:auto; color:#6b5025; z-index:999; line-height:18px;}
+.tips .arrow{ position:absolute; left:14px; top:-7px; display:block;background:url(../images/arrow.gif) no-repeat; width:11px; height:7px;}
+.tips .name{ color:#936112;}
+</style>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="../js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="../js/jScrollPane.js"></script>
+<script type="text/javascript">
+	$(function(){
+		// 初始化滚动条
+		$('#main').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});
+		
+		$("#main .item").mouseenter(function(){
+			
+		});
+	})
+</script>
+</head>
+
+<body>
+<div class="wrap">
+	<div class="content">
+		<div class="main" id="main">
+			<% if (names.length) { %>
+			<% names.forEach(function(name){ %>
+			<div class="item"><%= name %></div>
+			<% }) %>
+			<% } %>			
+		</div>
+	</div>
+</div>
+
+<div class="tips" style="left:480px; top:170px;"><span class="arrow"></span><span class="name">─╄OvЁ 酒窝</span>给<span class="name">红颜皆祸水</span>贴的纸条</div>
+</body>
+</html>

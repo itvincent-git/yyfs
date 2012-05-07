@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>贴纸条</title>
+<link type="text/css" rel="stylesheet" href="../css/jScrollPane.css" />
+<style type="text/css">
+body {margin:0 auto; padding:0;text-decoration: none; font-size:12px;font-family:Arial,Verdana, Helvetica, sans-serif; color:#5c4625;}
+* { margin: 0; padding: 0; }
+a{ outline:none; text-decoration:none;}
+
+ h1, h2, h3, h4{ margin: 0; padding:0; font-size:18px;}
+ img{ border:none;-ms-interpolation-mode: bicubic; }
+ ul,li,dl,dt,dd,form{ margin:0; padding:0; list-style:none;}
+
+.clear { clear:both; float:none; height:1px; overflow:hidden;} 
+.clearfix { height:0;clear:both;float:none;overflow:hidden;width:100%;}
+/*.wrap{ width:763px; height:697px; background:#e5d8c2;}*/
+
+.content{ width:500px; height:330px; background:url(../images/body_bg.jpg) no-repeat; margin:0 auto; padding:90px 0 0 0;}
+.main{width:500px;height:330px; font-family:"微软雅黑" ;}
+.content .item{background:url(../images/sticker_bg.png) no-repeat!important; background:none; 
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/sticker_bg.png' ,sizingMethod='crop'); width:68px; height:52px; padding:20px 10px;text-align:center; overflow:hidden; float:left; display:inline; margin:0 10px 10px 10px;}
+.content .big{background:url(../images/sticker_bg_big.png) no-repeat!important; background:none; 
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/sticker_bg_big.png' ,sizingMethod='crop'); width:110px; height:87px; padding:25px 20px 25px 10px;}
+
+/*滚动条*/
+.content .jScrollPaneDrag {background:url(../images/drag_middle.gif) repeat-y;}
+.content .jScrollPaneDragTop {background:url(../images/drag_top.gif) no-repeat;height:10px;}
+.content .jScrollPaneDragBottom {background:url(../images/drag_bottom.gif) no-repeat;height:10px;}
+
+.content .jScrollPaneDragHover{background:url(../images/drag_middle.gif) repeat-y;}
+.content .jScrollPaneDragTopHover{background:url(../images/drag_top.gif) no-repeat;height:10px;}
+.content .jScrollPaneDragBottomHover{background:url(../images/drag_bottom.gif) no-repeat;height:10px;}
+
+.tips{ position:absolute; left:0; top:0; border:1px #b89d73 solid; background:#d4bc96; width:110px; padding:5px; height:auto; color:#6b5025; z-index:999;}
+.tips .arrow{ position:absolute; left:14px; top:-7px; display:block;background:url(../images/arrow.gif) no-repeat; width:11px; height:7px;}
+.tips .name{ color:#936112;}
+
+.edit_con{ font-size:14px; padding:50px 20px 0 35px;}
+.edit_con ul{ margin-bottom:20px;}
+.edit_con li{ float:left; display:inline;}
+.edit_con .name{ color:#7d5c22;}
+.edit_con .word{ background:url(../images/word_bg.jpg) no-repeat; width:296px; height:80px; padding:14px 20px 10px 30px; overflow:hidden; border:none; resize:none;}
+.edit_con .btn_con{ padding-left:95px;}
+.edit_con .submit{ display:block; width:114px; height:35px; overflow:hidden;background:url(../images/btn.gif) scroll 0 0 no-repeat; }
+.edit_con a.submit:hover{background:url(../images/btn.gif) scroll 0 -35px no-repeat; }
+</style>
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		//cid = yy.channel.getCurrentChannelInfo().longId;
+		//var src_nick = yy.user.getCurrentUserInfo().nick;
+		var src_nick = "战神";
+		var cid = 12089499;
+		$('.submit').click(function(){		
+			var content = $('.word').val();
+			//src_uid = yy.user.getCurrentUserInfo().uid;	
+			$.ajax({dataType : 'json', type : 'POST', url : '/create', data : {
+					content : content, 
+					cid : cid,
+					src_nick : src_nick,
+					tar_nick : $('.name').text()
+					
+				}, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				success : function(data){
+					if(data.result == 0){
+						//$('.submit').after('<div>已经悄悄地贴在了他的身上</div>');
+						//document.location.href = '/';
+					}else{
+						alert('服务器出错');
+					}
+				}
+				,error : function(){
+					alert('服务器出错');
+				}
+			});
+		});
+	});
+</script>
+</head>
+
+<body>
+<div class="wrap">
+	<div class="content">
+		<div class="main" id="main">
+			<div class="edit_con">
+				<ul class="con">
+					<li>你想贴的人：</li>
+					<li><span class="name">─╀0vЁ 豆甜甜『Ｍｍ天籟の纪管』</span></li>
+					<div class="clearfix"></div>
+				</ul>
+				<ul>
+					<li style="margin-top:10px;">你想说的话：</li>
+					<li><textarea class="word"></textarea></li>
+					<div class="clearfix"></div>
+				</ul>
+				<p class="btn_con"><a href="#" class="submit"></a></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

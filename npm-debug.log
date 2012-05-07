@@ -1,0 +1,53 @@
+info it worked if it ends with ok
+verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+verbose cli   'install',
+verbose cli   'forever=0.8.3' ]
+info using npm@1.1.16
+info using node@v0.6.15
+verbose C:\Program Files\nodejs\\node.exe node symlink
+verbose config file C:\Users\Administrator\.npmrc
+verbose config file C:\Program Files\nodejs\etc\npmrc
+verbose config file C:\Program Files\nodejs\node_modules\npm\npmrc
+verbose caching F:\快盘\我的代码\yyfs\package.json
+verbose loadDefaults application-name@0.0.1
+verbose caching F:\快盘\我的代码\yyfs\node_modules\express\package.json
+verbose caching F:\快盘\我的代码\yyfs\node_modules\ejs\package.json
+verbose caching F:\快盘\我的代码\yyfs\node_modules\tenjin\package.json
+verbose caching F:\快盘\我的代码\yyfs\node_modules\jade\package.json
+verbose caching F:\快盘\我的代码\yyfs\node_modules\redis\package.json
+verbose from cache F:\快盘\我的代码\yyfs\package.json
+verbose readDependencies: using package.json deps
+verbose cache add [ 'forever=0.8.3', null ]
+silly cache add: name, spec, args [ undefined, 'forever=0.8.3', [ 'forever=0.8.3', null ] ]
+verbose parsed url { pathname: 'forever=0.8.3',
+verbose parsed url   path: 'forever=0.8.3',
+verbose parsed url   href: 'forever=0.8.3' }
+verbose addNamed [ 'forever=0.8.3', '' ]
+verbose addNamed [ null, '' ]
+silly name, range, hasData [ 'forever=0.8.3', '', false ]
+verbose raw, before any munging forever=0.8.3
+verbose url resolving [ 'https://registry.npmjs.org/', './forever%3D0.8.3' ]
+verbose url resolved https://registry.npmjs.org/forever%3D0.8.3
+http GET https://registry.npmjs.org/forever%3D0.8.3
+http 404 https://registry.npmjs.org/forever%3D0.8.3
+silly get cb [ 404,
+silly get cb   { server: 'CouchDB/1.2.0 (Erlang OTP/R15B)',
+silly get cb     date: 'Mon, 07 May 2012 10:12:24 GMT',
+silly get cb     'content-type': 'application/json',
+silly get cb     'content-length': '52',
+silly get cb     'cache-control': 'must-revalidate' } ]
+ERR! 404 'forever%3D0.8.3' is not in the npm registry.
+ERR! 404 You should bug the author to publish it
+ERR! 404 Note that you can also install from a
+ERR! 404 tarball, folder, or http url, or git url.
+ERR! 
+ERR! System Windows_NT 6.1.7601
+ERR! command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "forever=0.8.3"
+ERR! cwd F:\快盘\我的代码\yyfs
+ERR! node -v v0.6.15
+ERR! npm -v 1.1.16
+ERR! code E404
+ERR! message 404 Not Found: forever%3D0.8.3
+ERR! errno {}
+verbose exit [ 1, true ]

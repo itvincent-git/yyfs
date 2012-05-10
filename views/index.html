@@ -183,7 +183,7 @@ function listSticker(){
                     data[i].content, '</div>');
             }
             $('.list').html(s.join(''));
-            $('.main').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});
+            $('.wrap').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});
             $('.item').each(function(index){
                 fixFont(this);
             });

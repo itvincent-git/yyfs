@@ -59,7 +59,7 @@ filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/sticker
 <script type="text/javascript" src="../js/jBox/jquery.jBox-2.3.min.js"></script>
 <script type="text/javascript" src="../js/jBox/i18n/jquery.jBox-zh-CN.js"></script>
 <script type="text/javascript">
-var move, cid, currentUser, canDelete = false;
+var move, cid, currentUser, isManager = false, targetUser;
 $(function(){
 	var tips = $('.tips');
 
@@ -70,10 +70,10 @@ $(function(){
         if(currentUser.role >= 150){
             yy.channel.userListPopMenu.setPopMenu('贴纸条');
             yy.channel.userListPopMenu.addEventListener(IYYChannelUserListPopMenu.CLICKED,onClicked);
-            canDelete = true;
+            yy.channel.appMsg.addEventListener(IYYChannelAppMsg.APP_LINK_CLICKED,onLinkClicked);
+            isManager = true;
         }
         cid = yy.channel.getCurrentChannelInfo().longId;
-
     }catch(e){
         //test
         cid = 12089499;
@@ -83,11 +83,19 @@ $(function(){
 
 	function onClicked(eventData)
 	{
-		$('.name').text(yy.user.getUserInfo(eventData.uid).name);
-        //jump to edit page
+        targetUser = yy.user.getUserInfo(eventData.uid);
+		$('.name').text(targetUser.name);
+        //show edit page
         $('.edit_con').show();
         $('.item').hide();
 	}
+
+    function onLinkClicked(eventData)
+    {
+        if(eventData.token == 1){
+            listSticker();
+        }
+    }
 
 
 	$(".main").delegate('.delete', 'click', function(e){
@@ -138,6 +146,12 @@ $(function(){
                 if(data.result == 0){
                     $('.edit_con').hide();
                     listSticker();
+                    try{
+                        //send message to the target user
+                        yy.channel.appMsg.sendMsgToUsers([targetUser.uid], "被偷偷的贴了一张纸条", 0, 9, 1);
+                    }catch(e){
+
+                    }
                 }else{
                     $.jBox.error('服务器出错');
                 }
@@ -155,7 +169,10 @@ function listSticker(){
             //console.dir(data);
             var s = [];
             for(var i = 0; i < data.length; i++){
-                s.push('<div class="item big" title="', data[i].src_nick + '&nbsp;给&nbsp;', data[i].tar_nick+ '&nbsp;贴的纸条">', canDelete ? '<a href="#" class="delete" stickerId="'+ data[i].id + '"></a>' : '', data[i].content, '</div>');
+                s.push('<div class="item big" title="', data[i].src_nick + '&nbsp;给&nbsp;',
+                    data[i].tar_nick+ '&nbsp;贴的纸条">',
+                    isManager ? '<a href="#" class="delete" stickerId="'+ data[i].id + '"></a>' : '',
+                    data[i].content, '</div>');
             }
             $('.list').html(s.join(''));
             $('.main').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});

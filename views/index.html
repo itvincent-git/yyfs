@@ -8,22 +8,30 @@
 <link rel="stylesheet" href="../css/tip-yellowsimple/tip-yellowsimple.css" type="text/css" />
 <link type="text/css" rel="stylesheet" href="../js/jBox/Skins/Brown/jbox.css"/>
 <style type="text/css">
-body {margin:0 auto; padding:0;text-decoration: none; font-size:12px;font-family:Arial,Verdana, Helvetica, sans-serif; color:#5c4625;}
-* { margin: 0; padding: 0; }
+body {margin:0 auto; padding:0;text-decoration: none; font-size:12px;font-family:Arial,Verdana, Helvetica, sans-serif; color:#5c4625;background:#deceb4;}
+*{ margin: 0; padding: 0; }
 a{ outline:none; text-decoration:none;}
 
- h1, h2, h3, h4{ margin: 0; padding:0; font-size:18px;}
- img{ border:none;-ms-interpolation-mode: bicubic; }
- ul,li,dl,dt,dd,form{ margin:0; padding:0; list-style:none;}
+h1, h2, h3, h4{ margin: 0; padding:0; font-size:18px;}
+img{ border:none;-ms-interpolation-mode: bicubic; }
+ul,li,dl,dt,dd,form{ margin:0; padding:0; list-style:none;}
 
 .clear { clear:both; float:none; height:1px; overflow:hidden;} 
 .clearfix { height:0;clear:both;float:none;overflow:hidden;width:100%;}
 
-.content{ width:500px; height:330px; background:url(../images/body_bg.jpg) no-repeat; margin:0 auto; padding:90px 0 0 0;}
-.main{width:500px;height:330px; font-family:"微软雅黑" ;}
+.wrap{ width:100%; height:100%; background:url(../images/body_bg.gif) repeat-x #deceb4;}
+.banner{ background:url(../images/banner.jpg) no-repeat; width:768px; height:90px; margin:0 auto;}
+.help{position:absolute; top:-90px; right:70px;}
+.help .icon{background:url(../images/help.gif) no-repeat; width:46px; height:44px; display:block;}
+.help .help_tips{background:url(../images/help_tips.png) no-repeat!important; background:none;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/help_tips.png' ,sizingMethod='crop'); width:275px; height:70px; position:absolute; left:-160px; display:none;}
+
+.content{ width:768px;margin:0 auto; padding:15px 0 0 0; position:relative; }
+.main{font-family:"微软雅黑" ; width:768px; height:100%; overflow:hidden;}
+
 .content .item{position: relative;word-wrap: break-word; word-break: break-all;background:url(../images/sticker_bg.png) no-repeat!important; background:none;
 filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/sticker_bg.png' ,sizingMethod='crop'); width:68px; height:52px; padding:20px 10px;text-align:center; overflow:hidden; float:left; display:inline; margin:0 5px 10px 8px;}
-.content .big{background:url(../images/sticker_bg_big.png) no-repeat!important; background:none; 
+.content .big{background:url(../images/sticker_bg_big.png) no-repeat!important; background:none;
 filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/sticker_bg_big.png' ,sizingMethod='crop'); width:119px; height:96px; padding:25px 20px 25px 10px;}
 
 /*滚动条*/
@@ -233,7 +241,12 @@ function getLength(str) {
 
 <body>
 <div class="wrap">
+    <div class="banner"></div>
 	<div class="content">
+        <div class="help" onmouseover="document.getElementById('help_tips').style.display='block'" onmouseout="document.getElementById('help_tips').style.display='none'">
+            <a class="icon" href="javascript:;"></a>
+            <div class="help_tips" id="help_tips"></div>
+        </div>
 		<div class="main" id="main">
             <div class="list"></div>
             <div class="edit_con">

@@ -1,1 +1,1 @@
-nodemon app.js
+nodemon --debug app.js 

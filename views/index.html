@@ -6,6 +6,7 @@
 <link type="text/css" rel="stylesheet" href="../css/jScrollPane.css" />
 <link rel="stylesheet" href="../css/tip-yellow/tip-yellow.css" type="text/css" />
 <link rel="stylesheet" href="../css/tip-yellowsimple/tip-yellowsimple.css" type="text/css" />
+<link type="text/css" rel="stylesheet" href="../js/jBox/Skins/Red/jbox.css"/>
 <style type="text/css">
 body {margin:0 auto; padding:0;text-decoration: none; font-size:12px;font-family:Arial,Verdana, Helvetica, sans-serif; color:#5c4625;}
 * { margin: 0; padding: 0; }
@@ -20,7 +21,7 @@ a{ outline:none; text-decoration:none;}
 
 .content{ width:500px; height:330px; background:url(../images/body_bg.jpg) no-repeat; margin:0 auto; padding:90px 0 0 0;}
 .main{width:500px;height:330px; font-family:"微软雅黑" ;}
-.content .item{word-wrap: break-word; word-break: break-all;background:url(../images/sticker_bg.png) no-repeat!important; background:none; 
+.content .item{position: relative;word-wrap: break-word; word-break: break-all;background:url(../images/sticker_bg.png) no-repeat!important; background:none;
 filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/sticker_bg.png' ,sizingMethod='crop'); width:68px; height:52px; padding:20px 10px;text-align:center; overflow:hidden; float:left; display:inline; margin:0 5px 10px 8px;}
 .content .big{background:url(../images/sticker_bg_big.png) no-repeat!important; background:none; 
 filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/sticker_bg_big.png' ,sizingMethod='crop'); width:119px; height:96px; padding:25px 20px 25px 10px;}
@@ -37,68 +38,151 @@ filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/sticker
 .tips{ position:absolute; left:0; top:0; border:1px #b89d73 solid; background:#d4bc96; width:110px; padding:5px; height:auto; color:#6b5025; z-index:999; line-height:18px;}
 .tips .arrow{ position:absolute; left:14px; top:-7px; display:block;background:url(../images/arrow.gif) no-repeat; width:11px; height:7px;}
 .tips .name{ color:#936112;}
+
+.edit_con{ font-size:14px; padding:50px 20px 0 35px;display: none}
+.edit_con ul{ margin-bottom:20px;}
+.edit_con li{ float:left; display:inline;}
+.edit_con .name{ color:#7d5c22;}
+.edit_con .word{ background:url(../images/word_bg.jpg) no-repeat; width:296px; height:80px; padding:14px 20px 10px 30px; overflow:hidden; border:none; resize:none;}
+.edit_con .btn_con{ padding-left:95px;}
+.edit_con .submit{ display:block; width:114px; height:35px; overflow:hidden;background:url(../images/btn.gif) scroll 0 0 no-repeat; }
+.edit_con a.submit:hover{background:url(../images/btn.gif) scroll 0 -35px no-repeat; }
+
+.content .delete{ position:absolute; display:block; top:12px; right:12px; background:url(../images/delete_icon.gif) no-repeat; width:13px; height:14px;}
+.content .big .delete{top:17px; right:17px; }
 </style>
 <script type="text/javascript" src="../js/jquery.min.js"></script>
 <script type="text/javascript" src="../js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="../js/jScrollPane.js"></script>
 <script type="text/javascript" src="../js/jquery.poshytip.min.js"></script>
+<script type="text/javascript" src="../js/yyapi-1.1.js"></script>
+<script type="text/javascript" src="../js/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="../js/jBox/i18n/jquery.jBox-zh-CN.js"></script>
 <script type="text/javascript">
+var move, cid, currentUser;
 $(function(){
-	var tips = $('.tips'), move;
-	//yy.channel.userListPopMenu.setPopMenu('贴纸条');
+	var tips = $('.tips');
 
-	//yy.channel.userListPopMenu.addEventListener(IYYChannelUserListPopMenu.CLICKED,onClicked);
-	
-	//cid = yy.channel.getCurrentChannelInfo().longId;
-	var cid = 12089499;
-	
+    try{
+        currentUser = yy.user.getCurrentUserInfo();
+
+        //manager
+        if(currentUser.role >= 150){
+            yy.channel.userListPopMenu.setPopMenu('贴纸条');
+            yy.channel.userListPopMenu.addEventListener(IYYChannelUserListPopMenu.CLICKED,onClicked);
+        }
+        cid = yy.channel.getCurrentChannelInfo().longId;
+
+    }catch(e){
+        //test
+        cid = 12089499;
+    }
+
+    listSticker();
+
 	function onClicked(eventData)
-	{	
-		$('.nick').val(yy.user.getUserInfo(eventData.uid).name);		
-		//tar_uid = eventData.uid;	
-		//$('.create').after('用户'+eventData.uid+"菜单被点击,当前频道"+eventData.cid);
+	{
+		$('.name').text(yy.user.getUserInfo(eventData.uid).name);
+        //jump to edit page
+        $('.edit_con').show();
+        $('.item').hide();
 	}
 
-	
-	$("#main").delegate('.item', 'mouseleave', function(e){	
-		//console.debug("leave");
-		tips.hide();
+
+	$(".main").delegate('.delete', 'click', function(e){
+		var stickerId = $(this).attr('stickerId');
+        $.jBox.confirm("是否确认撕掉纸条？", "操作提示",function (v, h, f) {
+            if (v == 'ok'){
+                $.jBox.tip("正在删除数据...", 'loading');
+                $.ajax({dataType : 'json', type : 'POST', url : '/delete', data : {
+                    cid : cid,
+                    stickerId : stickerId
+                }, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    success : function(data){
+                        if(data.result == 0){
+                            $.jBox.tip('已撕掉', 'info');
+                            listSticker();
+                        }else{
+                            $.jBox.tip('服务器出错');
+                        }
+                    }
+                    ,error : function(){
+                        $.jBox.tip('服务器出错');
+                    }
+                });
+
+            }
+            return true; //close
+        });
+
+
 	});
-	
-	$.ajax({dataType : 'json', type : 'POST', url : '/list', data : {cid : cid }, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-		success : function(data){
-			//console.dir(data);
-			var s = [];
-			for(var i = 0; i < data.length; i++){
-				s.push('<div class="item big" title="', data[i].src_nick + '&nbsp;给&nbsp;', data[i].tar_nick+ '&nbsp;贴的纸条">', data[i].content, '</div>');
-			}
-			$('.main').append(s.join(''));
-			$('.main').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});
-			$('.item').each(function(index){
-				fixFont(this);
-			});
+
+    //create sticker
+    $('.submit').click(function(){
+        var content = $('.word').val();
+        try{
+            var src_nick = currentUser.name;
+        }catch(e){
+            var src_nick = '--';
+        }
+        $.ajax({dataType : 'json', type : 'POST', url : '/create', data : {
+            content : content,
+            cid : cid,
+            src_nick : src_nick,
+            tar_nick : $('.name').text()
+
+        }, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            success : function(data){
+                if(data.result == 0){
+                    $('.edit_con').hide();
+                    listSticker();
+                }else{
+                    $.jBox.error('服务器出错');
+                }
+            }
+            ,error : function(){
+                $.jBox.error('服务器出错');
+            }
+        });
+    });
+});
+
+function listSticker(){
+    $.ajax({dataType : 'json', type : 'POST', url : '/list', data : {cid : cid }, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        success : function(data){
+            //console.dir(data);
+            var s = [];
+            for(var i = 0; i < data.length; i++){
+                s.push('<div class="item big" title="', data[i].src_nick + '&nbsp;给&nbsp;', data[i].tar_nick+ '&nbsp;贴的纸条"><a href="#" class="delete" stickerId="', data[i].id, '"></a>', data[i].content, '</div>');
+            }
+            $('.list').html(s.join(''));
+            $('.main').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});
+            $('.item').each(function(index){
+                fixFont(this);
+            });
             $('.item').poshytip({
-//                alignTo: 'target',
+                //  alignTo: 'target',
                 className: 'tip-yellowsimple',
                 alignX: 'center',
                 alignY: 'bottom'
                 //followCursor: true,
                 //slide: false
             });
-		}
-	});
-});
-	
+        }
+    });
+}
+
 function fixFont(divObj){
 	var fontw=12;//parseInt(divObj.style.fontSize);
 	var fonth=fontw+2;//初始字体高度
 	var width=119;//str.offsetWidth DIV的宽度
 	var height=96;//divObj.offsetHeight;//div的高度
-	var lenstr=getLength(divObj.innerHTML);//DIV里文字长度
+	var lenstr=getLength($(divObj).text());//DIV里文字长度
 	// console.debug(lenstr);
 	fonts=fontw*fonth*lenstr;//字体面积
 	divs=width*height;//DIV面积
-	// console.debug(fontw + ',' + fonth + ',' + lenstr+ ',' + fonts + ',' + divs);
+	//console.debug(fontw + ',' + fonth + ',' + lenstr+ ',' + fonts + ',' + divs);
 	if(fonts>divs)
 	{
 		var rfont;//重设字体大小为rfont
@@ -132,14 +216,24 @@ function getLength(str) {
 <body>
 <div class="wrap">
 	<div class="content">
-		<div class="main" id="main">			
+		<div class="main" id="main">
+            <div class="list"></div>
+            <div class="edit_con">
+                <ul class="con">
+                    <li>你想贴的人：</li>
+                    <li><span class="name"></span></li>
+                    <div class="clearfix"></div>
+                </ul>
+                <ul>
+                    <li style="margin-top:10px;">你想说的话：</li>
+                    <li><textarea class="word"></textarea></li>
+                    <div class="clearfix"></div>
+                </ul>
+                <p class="btn_con"><a href="#" class="submit"></a></p>
+            </div>
 		</div>
 	</div>
 </div>
 
-<div class="tips" style="left:480px; top:170px;display:none">
-	<span class="arrow"></span>
-	<span class="tips_content"></span>
-</div>
 </body>
 </html>

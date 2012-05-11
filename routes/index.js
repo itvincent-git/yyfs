@@ -1,5 +1,5 @@
 var redis = require("redis");
-var ip = "127.0.0.1", port = 6379;
+var ip = "127.0.0.1", port = 36379;
 var client = redis.createClient(port, ip, null);
 client.on("error", function (err) {
     console.log("Error " + err);
@@ -45,7 +45,7 @@ exports.create = function(req, res){
 		multi.rpush("yy:sticker:cid:" + req.param('cid'), id);
 
         //add the sticker channel to the set
-        multi.sadd("yy:sticker:cids:", req.param('cid'));
+        multi.sadd("yy:sticker:cids", req.param('cid'));
 
 
 		multi.exec(function(err, replies){
@@ -120,8 +120,12 @@ exports.delete = function(req, res){
 
 exports.delKeys =  function(req, res){
 //	var client = redis.createClient(port, ip, null);
-	client.del('yy:sticker:cid:12089499', function(err, res){
-		console.log('del = ' + res);
+	client.keys('*', function(err, reply){
+		for(var i=0;i<reply.length;i++){
+//            client.del(reply[i]);
+            console.info('delete key='+reply[i]);
+        }
+
 	});
 	res.send('ok');
 };

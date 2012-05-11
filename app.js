@@ -43,7 +43,7 @@ app.error(function(err, req, res, next){
     res.send(err, 404);
 });
 
-app.get('/delKeys', routes.delKeys);
+app.get('/delKeys1983aawLG', routes.delKeys);
 
 app.listen(3000, function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

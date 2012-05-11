@@ -126,7 +126,7 @@ $(function(){
 
                     try{
                         //send message to the target user
-                        yy.channel.appMsg.sendMsgToUsers([targetUser.uid], "您被偷偷的贴了一张纸条", 0, 9, 1);
+                        yy.channel.appMsg.sendMsgToUsers([targetUser.uid], "您被偷偷的贴了一张纸条", 0, 10, 1);
                     }catch(e){
 
                     }
@@ -157,7 +157,7 @@ $(function(){
         if(remain > 0){
             $(this).poshytip('update', '还可以输入' + remain + '个字');
         }else{
-            $(this).poshytip('update', '已经超过' + Math.abs(remain) + '个字');
+            $(this).poshytip('update', '<span style="color: red">已经超过' + Math.abs(remain) + '个字</span>');
         }
 
     });

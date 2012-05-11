@@ -19,7 +19,7 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
-  //app.use(express.logger());//日志
+  //app.use(express.logger());//http日志
   app.use(express.static(__dirname + '/public'));
 });
 

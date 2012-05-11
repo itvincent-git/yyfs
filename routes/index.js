@@ -18,6 +18,11 @@ exports.create = function(req, res){
 	console.dir(req.body);
 //	var client = redis.createClient(port, ip, null);
 
+    if(req.param('content').length > 140){
+        res.json({"result": "60001"});
+        return;
+    }
+
     //sticker id
 	var id;
 	var multi = client.multi();

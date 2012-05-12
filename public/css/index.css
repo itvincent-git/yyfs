@@ -104,29 +104,25 @@ ul, li, dl, dt, dd, form {
 }
 
 .content .item {
+    width: 140px;
+    height: 145px;
+    float: left;
+    display: inline;
+    overflow: hidden;
+    margin: 0 5px 15px 5px;
     position: relative;
     word-wrap: break-word;
     word-break: break-all;
-    background: url(../images/sticker_bg.png) no-repeat !important;
-    background: none;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src = '../images/sticker_bg.png', sizingMethod = 'crop');
-    width: 68px;
-    height: 52px;
-    padding: 20px 10px;
-    text-align: center;
-    overflow: hidden;
-    float: left;
-    display: inline;
-    margin: 0 5px 15px 5px;
 }
 
-.content .big {
+.content .item .bg {
     background: url(../images/sticker_bg_big.png) no-repeat !important;
     background: none;
     filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src = '../images/sticker_bg_big.png', sizingMethod = 'crop');
     width: 110px;
     height: 95px;
     padding: 25px 20px 25px 10px;
+    text-align: center;
 }
 
 /*滚动条*/
@@ -206,18 +202,31 @@ ul, li, dl, dt, dd, form {
 }
 
 /*.edit_con .word {*/
-    /*background: url(../images/word_bg.jpg) no-repeat !important;*/
-    /*background: url(../images/word_bg.jpg) fixed no-repeat;*/
-    /*width: 296px;*/
-    /*height: 83px;*/
-    /*padding: 14px 20px 10px 25px;*/
-    /*border: none;*/
-    /*resize: none;*/
-    /*overflow-x: none;*/
-    /*overflow-y: auto;*/
+/*background: url(../images/word_bg.jpg) no-repeat !important;*/
+/*background: url(../images/word_bg.jpg) fixed no-repeat;*/
+/*width: 296px;*/
+/*height: 83px;*/
+/*padding: 14px 20px 10px 25px;*/
+/*border: none;*/
+/*resize: none;*/
+/*overflow-x: none;*/
+/*overflow-y: auto;*/
 /*}*/
-.edit_con .word_bg{background:url(../images/word_bg.jpg) no-repeat;height:87px; padding:10px 20px 10px 25px; }
-.edit_con .word{width:305px; height:83px;border:none; resize:none; overflow-x:none; overflow-y:auto; background:none;}
+.edit_con .word_bg {
+    background: url(../images/word_bg.jpg) no-repeat;
+    height: 87px;
+    padding: 10px 20px 10px 25px;
+}
+
+.edit_con .word {
+    width: 305px;
+    height: 83px;
+    border: none;
+    resize: none;
+    overflow-x: none;
+    overflow-y: auto;
+    background: none;
+}
 
 .edit_con .btn_con {
     padding-left: 95px;
@@ -250,5 +259,18 @@ ul, li, dl, dt, dd, form {
     right: 17px;
 }
 
-.refresh{ position:absolute; right:10px; top:-80px; background:url(../images/refresh_icon.gif) left center no-repeat; _background-position:left top; padding-left:14px; color:#3d302f;font-family:"微软雅黑" ; font-size:14px;}
-.refresh:hover{ text-decoration:underline;}
+.refresh {
+    position: absolute;
+    right: 10px;
+    top: -80px;
+    background: url(../images/refresh_icon.gif) left center no-repeat;
+    _background-position: left top;
+    padding-left: 14px;
+    color: #3d302f;
+    font-family: "微软雅黑";
+    font-size: 14px;
+}
+
+.refresh:hover {
+    text-decoration: underline;
+}

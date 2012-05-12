@@ -9,6 +9,13 @@ var express = require('express')
 var app = module.exports = express.createServer();
 
 app.register(".html", require('tenjin'));
+//app.register('.html', {
+//    compile: function(str, options){
+//        return function(locals){
+//            return str;
+//        };
+//    }
+//});
 // Configuration
 
 app.configure(function(){

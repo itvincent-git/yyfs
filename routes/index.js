@@ -1,4 +1,5 @@
 var redis = require("redis");
+var path = require("path");
 var ip = "127.0.0.1", port = 36379;
 var client = redis.createClient(port, ip, null);
 client.on("error", function (err) {
@@ -7,7 +8,8 @@ client.on("error", function (err) {
 // redis.debug_mode = true;
 
 exports.index = function(req, res){	
-	res.render('index.html');
+//	res.render('index.html');
+    res.sendfile(path.resolve(__dirname, '..', 'views/index.html'));
 };
 
 exports.edit = function(req, res){

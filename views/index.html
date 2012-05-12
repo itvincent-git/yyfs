@@ -4,8 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>贴纸条</title>
 <link rel="stylesheet" type="text/css" href="../css/jScrollPane.css" />
-<link rel="stylesheet" href="../css/tip-yellow/tip-yellow.css" type="text/css" />
-<link rel="stylesheet" href="../css/tip-yellowsimple/tip-yellowsimple.css" type="text/css" />
+<link rel="stylesheet" type="text/css" href="../css/tip-yellow/tip-yellow.css" />
+<link rel="stylesheet" type="text/css" href="../css/tip-yellowsimple/tip-yellowsimple.css" />
 <link rel="stylesheet" type="text/css" href="../js/jBox/Skins/Brown/jbox.css"/>
 <link rel="stylesheet" type="text/css" href="../css/index.css" />
 <script type="text/javascript" src="../js/jquery.min.js"></script>
@@ -64,7 +64,7 @@ $(function(){
 
 	$(".main").delegate('.delete', 'click', function(e){
 		var stickerId = $(this).attr('stickerId');
-        $.jBox.confirm("是否确认撕掉纸条？", "操作提示",function (v, h, f) {
+        $.jBox.confirm("确认撕掉这张纸条吗？", "操作提示",function (v, h, f) {
             if (v == 'ok'){
                 $.jBox.tip("正在删除数据...", 'loading');
                 $.ajax({dataType : 'json', type : 'POST', url : '/delete', data : {
@@ -180,9 +180,9 @@ function listSticker(){
             var s = [];
             for(var i = 0; i < data.length; i++){
                 s.push('<div class="item big" title="', data[i].src_nick + '&nbsp;给&nbsp;',
-                    data[i].tar_nick+ '&nbsp;贴的纸条">',
+                    data[i].tar_nick+ '&nbsp;贴的纸条"><div class="bg">',
                     isManager ? '<a href="#" class="delete" stickerId="'+ data[i].id + '"></a>' : '',
-                    data[i].content, '</div>');
+                    data[i].content, '</div></div>');
             }
             $('.edit_con').hide();
             $('.list').html(s.join(''));
@@ -198,6 +198,7 @@ function listSticker(){
 
             });
             $.jBox.closeTip();
+
         }
     });
 }
@@ -211,7 +212,11 @@ function fixFont(divObj){
 	// console.debug(lenstr);
 	fonts=fontw*fonth*lenstr;//字体面积
 	divs=width*height;//DIV面积
-	//console.debug(fontw + ',' + fonth + ',' + lenstr+ ',' + fonts + ',' + divs);
+	//  console.debug(fontw + ',' + fonth + ',' + lenstr+ ',' + fonts + ',' + divs);
+    if(lenstr == 2){
+        divObj.style.fontSize="50px";
+        return;
+    }
 	if(fonts>divs)
 	{
 		var rfont;//重设字体大小为rfont

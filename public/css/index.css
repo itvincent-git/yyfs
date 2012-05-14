@@ -185,7 +185,6 @@ ul, li, dl, dt, dd, form {
 .edit_con {
     font-size: 14px;
     padding: 50px 20px 0 35px;
-    display: none
 }
 
 .edit_con ul {
@@ -199,19 +198,9 @@ ul, li, dl, dt, dd, form {
 
 .edit_con .name {
     color: #7d5c22;
+
 }
 
-/*.edit_con .word {*/
-/*background: url(../images/word_bg.jpg) no-repeat !important;*/
-/*background: url(../images/word_bg.jpg) fixed no-repeat;*/
-/*width: 296px;*/
-/*height: 83px;*/
-/*padding: 14px 20px 10px 25px;*/
-/*border: none;*/
-/*resize: none;*/
-/*overflow-x: none;*/
-/*overflow-y: auto;*/
-/*}*/
 .edit_con .word_bg {
     background: url(../images/word_bg.jpg) no-repeat;
     height: 87px;
@@ -223,7 +212,7 @@ ul, li, dl, dt, dd, form {
     height: 83px;
     border: none;
     resize: none;
-    overflow-x: none;
+    overflow-x: hidden;
     overflow-y: auto;
     background: none;
 }

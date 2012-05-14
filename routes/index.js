@@ -24,6 +24,10 @@ exports.create = function(req, res){
         res.json({"result": "60001"});
         return;
     }
+    if(req.param('content').length < 1){
+        res.json({"result": "60002"});
+        return;
+    }
 
     //sticker id
 	var id;

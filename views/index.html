@@ -8,20 +8,40 @@
 <link rel="stylesheet" type="text/css" href="../css/tip-yellowsimple/tip-yellowsimple.css" />
 <link rel="stylesheet" type="text/css" href="../js/jBox/Skins/Brown/jbox.css"/>
 <link rel="stylesheet" type="text/css" href="../css/index.css" />
+<!--<link rel="stylesheet" type="text/css" media="screen" href="../js/fancybox/jquery.fancybox-1.3.4" />-->
 <script type="text/javascript" src="../js/jquery.min.js"></script>
+<!--<script type="text/javascript" src="../js/jquery.tinyscrollbar.js"></script>-->
 <script type="text/javascript" src="../js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="../js/jScrollPane.js"></script>
+<!--<script type="text/javascript" src="../js/jquery.jscrollpane.js"></script>-->
 <script type="text/javascript" src="../js/jquery.poshytip.min.js"></script>
 <script type="text/javascript" src="../js/yyapi-1.1.js"></script>
 <script type="text/javascript" src="../js/jBox/jquery.jBox-2.3.min.js"></script>
 <script type="text/javascript" src="../js/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<!--<script type="text/javascript" src="../js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>-->
 <script type="text/javascript">
-var move, cid, currentUser, isManager = false, targetUser, timer, word;
+var move, cid, currentUser, isManager = false, targetUser, timer, word, list;
 $(function(){
 	var tips = $('.tips');
     word = $('.word');
+    list = $('.list');
+    list[0].style.height = ($(window).height() - 115) + 'px';
+    var html = [
+        '<div class="edit_con" id="edit_con" style="height:250px;background: url(../images/body_bg.gif) repeat-x #deceb4;">',
+        '<ul class="con" style="height:25px;">  ',
+        '<li>你想贴的人：</li>' ,
+        '<li><span class="name"></span></li>',
+        '<div class="clearfix"></div>    ',
+        ' </ul>  ',
+        ' <ul>',
+        ' <li style="margin-top:10px">你想说的话：</li> ',
+        '<li class="word_bg"><textarea class="word" title="还可以输入140个字"></textarea></li> ',
+        '<div class="clearfix"></div> ',
+        '</ul>',
+        '<p class="btn_con"><a href="#" class="submit"></a></p>' ,
+        '</div>  ',
+    ].join('');
 
-    $('.list')[0].style.height = ($(window).height() - 110) + 'px';
     try{
         currentUser = yy.user.getCurrentUserInfo();
 
@@ -40,19 +60,30 @@ $(function(){
         cid = 12089499;
 
     }
-//    $('.edit_con').show();
+
     listSticker();
 
 	function onClicked(eventData)
 	{
         targetUser = yy.user.getUserInfo(eventData.uid);
+        $.jBox(html, {title:'贴纸条', width: 500,  buttons: {}});
 		$('.name').text(targetUser.name);
+        $('.word').poshytip({
+            alignTo: 'target',
+            showOn: 'focusin',
+            className: 'tip-yellowsimple',
+            alignX: 'right',
+            alignY: 'center'
+        });
         //show edit page
-        $('.edit_con').show();
-        $('.list').jScrollPaneRemove();
-        $('.list').hide();
-        word.val('');
+//        $('.edit_con').show();
+//        $('.list').hide();
+//        $('.list').jScrollPaneRemove();
+
+//        word.val('');
+
 	}
+//    $.jBox(html, {title:'贴纸条', width: 500,  buttons: {}});
 
     function onLinkClicked(eventData)
     {
@@ -94,14 +125,17 @@ $(function(){
 //    $(window).resize(function(e){
 //        if(timer) clearTimeout(timer);
 //        timer = setTimeout(function(){
-//            $('.list').jScrollPaneRemove();
-//            $('.list')[0].style.height = ($(window).height() - 90) + 'px';
-//            $('.list').jScrollPane();
+//            if(list.is(':visible')){
+//                $('.list').jScrollPaneRemove();
+//                $('.list')[0].style.height = ($(window).height() - 115) + 'px';
+//                $('.list').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});
+//            }
+//
 //        }, 100);
 //    });
 
     //create sticker
-    $('.submit').click(function(){
+    $(document).delegate('.submit', 'click', function(){
         var content = $('.word').val();
         if(content.length > 140){
             $.jBox.tip('对不起，输入的内容不能超过140个字。', 'error');
@@ -131,6 +165,10 @@ $(function(){
 
                     }
                 }else{
+                    if(data.result == 60002){
+                        $.jBox.error('请输入你想说的话');
+                        return;
+                    }
                     $.jBox.error('服务器出错');
                 }
             }
@@ -150,33 +188,39 @@ $(function(){
 
     $('.refresh').click(function(){
         listSticker();
+//        $.jBox(html, {title:'贴纸条', width: 500,  buttons: {}});
+//        $('.word').poshytip({
+//            alignTo: 'target',
+//            showOn: 'focusin',
+//            className: 'tip-yellowsimple',
+//            alignX: 'right',
+//            alignY: 'center'
+//        });
     });
 
-    $('.word').keyup(function(){
-        var remain = 140 - $(this).val().length;
-        if(remain > 0){
-            $(this).poshytip('update', '还可以输入' + remain + '个字');
+    $(document).delegate('.word', 'keyup', function(){
+
+        var remain = 140 - $('.word').val().length;
+        if(remain >= 0){
+            $('.word').poshytip('update', '还可以输入' + remain + '个字');
         }else{
-            $(this).poshytip('update', '<span style="color: red">已经超过' + Math.abs(remain) + '个字</span>');
+            $('.word').poshytip('update', '<span style="color: red">已经超过' + Math.abs(remain) + '个字</span>');
         }
 
     });
 
-    $('.word').poshytip({
-        alignTo: 'target',
-        showOn: 'focus',
-        className: 'tip-yellowsimple',
-        alignX: 'right',
-        alignY: 'center'
 
-    });
+
+
 });
 
 function listSticker(){
+    $.jBox.close();
     $.jBox.tip('正在获取数据...', 'loading');
     $.ajax({dataType : 'json', type : 'POST', url : '/list', data : {cid : cid },
         cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         success : function(data){
+
             var s = [];
             for(var i = 0; i < data.length; i++){
                 s.push('<div class="item big" title="', data[i].src_nick + '&nbsp;给&nbsp;',
@@ -184,10 +228,12 @@ function listSticker(){
                     isManager ? '<a href="#" class="delete" stickerId="'+ data[i].id + '"></a>' : '',
                     data[i].content, '</div></div>');
             }
-            $('.edit_con').hide();
+//            $('.edit_con').hide();
             $('.list').html(s.join(''));
             $('.list').show();
             $('.list').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});
+
+//            $('.list').tinyscrollbar();
             $('.item').each(function(index){
                 fixFont(this);
             });
@@ -210,24 +256,19 @@ function fixFont(divObj){
 	var height=95;//divObj.offsetHeight;//div的高度
 	var lenstr=getLength($(divObj).text());//DIV里文字长度
 	// console.debug(lenstr);
+    if(lenstr <= 0) return;
 	fonts=fontw*fonth*lenstr;//字体面积
 	divs=width*height;//DIV面积
 	//  console.debug(fontw + ',' + fonth + ',' + lenstr+ ',' + fonts + ',' + divs);
-    if(lenstr == 2){
-        divObj.style.fontSize="50px";
+    var rfont;//重设字体大小为rfont
+    if(lenstr <= 6){
+        rfont=Math.round((Math.sqrt(4*lenstr*divs-4*lenstr*lenstr)-2*lenstr)/(2*lenstr) * 0.6);
+        divObj.style.fontSize=rfont+"px";
         return;
     }
-	if(fonts>divs)
-	{
-		var rfont;//重设字体大小为rfont
-		rfont=Math.round((Math.sqrt(4*lenstr*divs-4*lenstr*lenstr)-2*lenstr)/(2*lenstr));
-		divObj.style.fontSize=rfont+"px";
-	}else{
-		var rfont;//重设字体大小为rfont
-		rfont=Math.round((Math.sqrt(4*lenstr*divs-4*lenstr*lenstr)-2*lenstr)/(2*lenstr));
-		// console.debug(rfont);
-		divObj.style.fontSize=rfont+"px";
-	}
+	rfont=Math.round((Math.sqrt(4*lenstr*divs-4*lenstr*lenstr)-2*lenstr)/(2*lenstr));
+	divObj.style.fontSize=rfont+"px";
+
 }
 
 function getLength(str) {
@@ -258,20 +299,20 @@ function getLength(str) {
         <a href="javascript:void(0)" class="refresh">刷新</a>
 		<div class="main" id="main">
             <div class="list"></div>
-            <div class="edit_con">
-                <ul class="con">
-                    <li>你想贴的人：</li>
-                    <li><span class="name"></span></li>
-                    <div class="clearfix"></div>
-                </ul>
-                <ul>
-                    <li style="margin-top:10px;">你想说的话：</li>
-                    <li class="word_bg"><textarea class="word" title="还可以输入140个字"></textarea></li>
-                    <div class="clearfix"></div>
-                </ul>
-                <p class="btn_con"><a href="#" class="submit"></a></p>
-            </div>
-		</div>
+            <!--<div class="edit_con" id="edit_con">-->
+                <!--<ul class="con">-->
+                    <!--<li>你想贴的人：</li>-->
+                    <!--<li><span class="name"></span></li>-->
+                    <!--<div class="clearfix"></div>-->
+                <!--</ul>-->
+                <!--<ul>-->
+                    <!--<li style="margin-top:10px;">你想说的话：</li>-->
+                    <!--<li class="word_bg"><textarea class="word" title="还可以输入140个字"></textarea></li>-->
+                    <!--<div class="clearfix"></div>-->
+                <!--</ul>-->
+                <!--<p class="btn_con"><a href="#" class="submit"></a></p>-->
+            <!--</div>-->
+        </div>
 	</div>
 </div>
 

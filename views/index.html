@@ -35,7 +35,7 @@ $(function(){
         ' </ul>  ',
         ' <ul>',
         ' <li style="margin-top:10px">你想说的话：</li> ',
-        '<li class="word_bg"><textarea class="word" title="还可以输入140个字"></textarea></li> ',
+        '<li class="word_bg"><textarea class="word" title="还可以输入70个字"></textarea></li> ',
         '<div class="clearfix"></div> ',
         '</ul>',
         '<p class="btn_con"><a href="#" class="submit"></a></p>' ,
@@ -137,8 +137,8 @@ $(function(){
     //create sticker
     $(document).delegate('.submit', 'click', function(){
         var content = $('.word').val();
-        if(content.length > 140){
-            $.jBox.tip('对不起，输入的内容不能超过140个字。', 'error');
+        if(content.length > 70){
+            $.jBox.tip('对不起，输入的内容不能超过70个字。', 'error');
             return;
         }
         try{
@@ -200,7 +200,7 @@ $(function(){
 
     $(document).delegate('.word', 'keyup', function(){
 
-        var remain = 140 - $('.word').val().length;
+        var remain = 70 - $('.word').val().length;
         if(remain >= 0){
             $('.word').poshytip('update', '还可以输入' + remain + '个字');
         }else{

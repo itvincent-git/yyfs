@@ -2,6 +2,22 @@ var redis = require("redis");
 var path = require("path");
 var ip = "127.0.0.1", port = 36379;
 var client = redis.createClient(port, ip, null);
+
+//var poolModule = require('generic-pool');
+//var pool = poolModule.Pool({
+//    name     : 'redis',
+//    create   : function(callback) {
+//        var client = redis.createClient(port, ip, null);
+//        // parameter order: err, resource
+//        // new in 1.0.6
+//        callback(null, client);
+//    },
+//    destroy  : function(client) { client.quit(); },
+//    max      : 10,
+//    idleTimeoutMillis : 30000,
+//    log : false
+//});
+
 client.on("error", function (err) {
     console.log("Error " + err);
 });
@@ -74,37 +90,51 @@ exports.create = function(req, res){
 exports.list = function(req, res, next){
 	var cid = req.param('cid');
     console.info('cid = ' + cid);
-	
+
 //	var client = redis.createClient(port, ip, null);
 
     //get the sticker ids in the channel
-	client.lrange("yy:sticker:cid:" + cid, 0, -1, function(err, reply){
-        if(err) {
-            return console.error('lrange = ' + err);
+//	client.lrange("yy:sticker:cid:" + cid, 0, -1, function(err, reply){
+//        if(err) {
+//            return console.error('lrange = ' + err);
+//        }
+//		console.info("yy:sticker:cid:" + cid + "=" + reply);
+//		var multi = client.multi();
+//
+//		for(var i = 0; i < reply.length; i++){
+//			var tztKey = 'yy:sticker:' + reply[i];
+//            //get sticker by id
+//			multi.get(tztKey);
+//		}
+//
+//		multi.exec(function(err, replies){
+//			if(err){
+//				console.error(err);
+//				return;
+//			}
+//			console.info("list = " + replies);
+//			var re = [];
+//			for(var i = 0; i < replies.length; i++){
+//				re.push(JSON.parse(replies[i]));
+//			}
+//			res.send(re);
+//		});
+//	});
+//    pool.acquire(function(err, client) {
+    client.sort("yy:sticker:cid:" + cid , 'get',  'yy:sticker:*', function(err, replies){
+        if(err){
+            console.error(err);
+            return;
         }
-		console.info("yy:sticker:cid:" + cid + "=" + reply);
-		var multi = client.multi();
-
-		for(var i = 0; i < reply.length; i++){
-			var tztKey = 'yy:sticker:' + reply[i];
-            //get sticker by id
-			multi.get(tztKey);
-		}
-
-		multi.exec(function(err, replies){
-//			client.quit();
-			if(err){
-				console.error(err);
-				return;
-			}
-			console.info("list = " + replies);
-			var re = [];
-			for(var i = 0; i < replies.length; i++){
-				re.push(JSON.parse(replies[i]));
-			}
-			res.send(re);
-		});		
-	});		
+        console.info("list = " + replies.length);
+        var re = [];
+        for(var i = 0; i < replies.length; i++){
+            re.push(JSON.parse(replies[i]));
+        }
+        res.send(re);
+//            pool.release(client);
+    });
+//    });
 };
 
 exports.delete = function(req, res){

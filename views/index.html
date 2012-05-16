@@ -250,11 +250,34 @@ function listSticker(){
 }
 
 function fixFont(divObj){
+    var lenstr = $(divObj).text().length;
+    var rfont;
+    if(lenstr <= 5){
+        rfont = 32;
+    }else if(lenstr > 5 && lenstr <= 10){
+        rfont = 26;
+    }else if(lenstr > 10 && lenstr <= 20){
+        rfont = 20;
+    }else if(lenstr > 20 && lenstr <= 30){
+        rfont = 15;
+    }else if(lenstr > 30 && lenstr <= 40){
+        rfont = 13;
+    }else if(lenstr > 40 && lenstr <= 50){
+        rfont = 12;
+    }else if(lenstr > 50 && lenstr <= 60){
+        rfont = 11;
+    }else{
+        rfont = 11;
+    }
+    divObj.style.fontSize = rfont + "px";
+}
+
+function fixFont1(divObj){
 	var fontw=12;//parseInt(divObj.style.fontSize);
 	var fonth=fontw+2;//初始字体高度
 	var width=110;//str.offsetWidth DIV的宽度
 	var height=95;//divObj.offsetHeight;//div的高度
-	var lenstr=getLength($(divObj).text());//DIV里文字长度
+	var lenstr=$(divObj).text().length;//getLength($(divObj).text());//DIV里文字长度
 	// console.debug(lenstr);
     if(lenstr <= 0) return;
 	fonts=fontw*fonth*lenstr;//字体面积
@@ -299,19 +322,6 @@ function getLength(str) {
         <a href="javascript:void(0)" class="refresh">刷新</a>
 		<div class="main" id="main">
             <div class="list"></div>
-            <!--<div class="edit_con" id="edit_con">-->
-                <!--<ul class="con">-->
-                    <!--<li>你想贴的人：</li>-->
-                    <!--<li><span class="name"></span></li>-->
-                    <!--<div class="clearfix"></div>-->
-                <!--</ul>-->
-                <!--<ul>-->
-                    <!--<li style="margin-top:10px;">你想说的话：</li>-->
-                    <!--<li class="word_bg"><textarea class="word" title="还可以输入140个字"></textarea></li>-->
-                    <!--<div class="clearfix"></div>-->
-                <!--</ul>-->
-                <!--<p class="btn_con"><a href="#" class="submit"></a></p>-->
-            <!--</div>-->
         </div>
 	</div>
 </div>

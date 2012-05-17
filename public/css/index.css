@@ -154,6 +154,10 @@ ul, li, dl, dt, dd, form {
     height: 10px;
 }
 
+.content .jScrollPaneTrack {
+    background: #d2b890;
+}
+
 .tips {
     position: absolute;
     left: 0;

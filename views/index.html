@@ -122,17 +122,17 @@ $(function(){
 
 	});
 
-//    $(window).resize(function(e){
-//        if(timer) clearTimeout(timer);
-//        timer = setTimeout(function(){
-//            if(list.is(':visible')){
-//                $('.list').jScrollPaneRemove();
-//                $('.list')[0].style.height = ($(window).height() - 115) + 'px';
-//                $('.list').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});
-//            }
-//
-//        }, 100);
-//    });
+    $(window).resize(function(e){
+        if(timer) clearTimeout(timer);
+        timer = setTimeout(function(){
+            if(list.is(':visible')){
+                $('.list').jScrollPaneRemove();
+                $('.list')[0].style.height = ($(window).height() - 115) + 'px';
+                $('.list').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});
+            }
+
+        }, 100);
+    });
 
     //create sticker
     $(document).delegate('.submit', 'click', function(){

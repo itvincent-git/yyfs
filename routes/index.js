@@ -36,7 +36,7 @@ exports.create = function(req, res){
 	console.dir(req.body);
 //	var client = redis.createClient(port, ip, null);
 
-    if(req.param('content').length > 140){
+    if(req.param('content').length > 70){
         res.json({"result": "60001"});
         return;
     }

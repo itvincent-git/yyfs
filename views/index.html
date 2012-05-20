@@ -75,13 +75,6 @@ $(function(){
             alignX: 'right',
             alignY: 'center'
         });
-        //show edit page
-//        $('.edit_con').show();
-//        $('.list').hide();
-//        $('.list').jScrollPaneRemove();
-
-//        word.val('');
-
 	}
 //    $.jBox(html, {title:'贴纸条', width: 500,  buttons: {}});
 
@@ -118,8 +111,6 @@ $(function(){
             }
             return true;
         });
-
-
 	});
 
     $(window).resize(function(e){
@@ -130,7 +121,6 @@ $(function(){
                 $('.list')[0].style.height = ($(window).height() - 115) + 'px';
                 $('.list').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});
             }
-
         }, 100);
     });
 
@@ -188,14 +178,6 @@ $(function(){
 
     $('.refresh').click(function(){
         listSticker();
-//        $.jBox(html, {title:'贴纸条', width: 500,  buttons: {}});
-//        $('.word').poshytip({
-//            alignTo: 'target',
-//            showOn: 'focusin',
-//            className: 'tip-yellowsimple',
-//            alignX: 'right',
-//            alignY: 'center'
-//        });
     });
 
     $(document).delegate('.word', 'keyup', function(){
@@ -208,10 +190,6 @@ $(function(){
         }
 
     });
-
-
-
-
 });
 
 function listSticker(){
@@ -223,25 +201,30 @@ function listSticker(){
 
             var s = [];
             for(var i = 0; i < data.length; i++){
-                s.push('<div class="item big" title="', data[i].src_nick + '&nbsp;给&nbsp;',
+                s.push('<div class="item big" ptip="', data[i].src_nick + '&nbsp;给&nbsp;',
                     data[i].tar_nick+ '&nbsp;贴的纸条"><div class="bg">',
                     isManager ? '<a href="#" class="delete" stickerId="'+ data[i].id + '"></a>' : '',
                     data[i].content, '</div></div>');
             }
-//            $('.edit_con').hide();
             $('.list').html(s.join(''));
             $('.list').show();
             $('.list').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});
 
-//            $('.list').tinyscrollbar();
             $('.item').each(function(index){
                 fixFont(this);
             });
+
             $('.item').poshytip({
-                className: 'tip-yellowsimple',
+//                className: 'tip-yellowsimple',
+                className: 'tip-yellow',
                 alignX: 'center',
                 alignY: 'bottom'
-
+                ,content : function(){
+                    var title = $(this).attr('ptip');
+                    var content = $(this).text();
+                    return '<div style="color: #8C3901; border-bottom: 1px solid gray;">' + title
+                            + '</div><div style="font-weight: normal;word-break: break-all;">' +  content + '</div>';
+                }
             });
             $.jBox.closeTip();
 

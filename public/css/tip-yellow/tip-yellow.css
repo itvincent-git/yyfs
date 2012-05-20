@@ -4,7 +4,8 @@
 	border:1px solid #939393;
 	padding:7px;
 	min-width:50px;
-	max-width:530px;
+	/*max-width:530px;*/
+    max-width:300px;
 	color:#8c3901;
 	background-color:#fef9d9;
 	background-image:url(tip-yellow.png); /* bgImageFrameSize >= 10 should work fine */
@@ -26,7 +27,8 @@
 	margin-top:-7px;
 	margin-left:15px;
 	top:0;
-	left:0;
+	/*left:0;*/
+    left:40%;
 	width:16px;
 	height:10px;
 	background:url(tip-yellow_arrows.png) no-repeat;
@@ -44,7 +46,8 @@
 	margin-top:-6px;
 	margin-left:15px;
 	top:100%;
-	left:0;
+	/*left:0;*/
+    left:40%;
 	width:16px;
 	height:13px;
 	background:url(tip-yellow_arrows.png) no-repeat -32px 0;

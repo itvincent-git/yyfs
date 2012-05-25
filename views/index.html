@@ -136,6 +136,7 @@ $(function(){
         }catch(e){
             var src_nick = '--';
         }
+        $.jBox.tip('正在提交数据...', 'loading');
         $.ajax({dataType : 'json', type : 'POST', url : '/create', data : {
             content : content,
             cid : cid,
@@ -161,9 +162,11 @@ $(function(){
                     }
                     $.jBox.error('服务器出错');
                 }
+                $.jBox.closeTip();
             }
             ,error : function(){
                 $.jBox.error('服务器出错');
+                $.jBox.closeTip();
             }
         });
     });

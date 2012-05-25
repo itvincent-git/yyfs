@@ -131,6 +131,10 @@ $(function(){
             $.jBox.tip('对不起，输入的内容不能超过70个字。', 'error');
             return;
         }
+        if(content.length < 1){
+            $.jBox.tip('你什么都没写喔……', 'info');
+            return;
+        }
         try{
             var src_nick = currentUser.name;
         }catch(e){

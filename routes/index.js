@@ -1,7 +1,22 @@
+var util = require('util');
 var redis = require("redis");
 var path = require("path");
 var ip = "127.0.0.1", port = 36379;
 var client = redis.createClient(port, ip, null);
+
+var winston = require('winston');
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)({timestamp : true}),
+        new (winston.transports.File)({ filename: 'slog.log', timestamp : true, maxsize : 100000000 })
+    ]
+    ,exceptionHandlers: [
+        new winston.transports.File({ filename: 'exceptions.log' })
+    ]
+    ,exitOnError: false
+});
+//winston.add(winston.transports.File, { filename: 'slog.log' });
+//winston.handleExceptions(new winston.transports.File({ filename: 'exceptions.log' }))
 
 //var poolModule = require('generic-pool');
 //var pool = poolModule.Pool({
@@ -19,7 +34,7 @@ var client = redis.createClient(port, ip, null);
 //});
 
 client.on("error", function (err) {
-    console.log("Error " + err);
+    logger.error("redis client error " + err);
 });
 // redis.debug_mode = true;
 
@@ -28,13 +43,12 @@ exports.index = function(req, res){
     res.sendfile(path.resolve(__dirname, '..', 'views/index.html'));
 };
 
-exports.edit = function(req, res){
-	res.render('edit.html', {items : [{content : '123'}, {content : '<a href="#">adf</a>'}]});
-};
+//exports.edit = function(req, res){
+//	res.render('edit.html', {items : [{content : '123'}, {content : '<a href="#">adf</a>'}]});
+//};
 
 exports.create = function(req, res){
-	console.dir(req.body);
-//	var client = redis.createClient(port, ip, null);
+    logger.info('create req =' + util.inspect(req.body));
 
     if(req.param('content').length > 70){
         res.json({"result": "60001"});
@@ -50,13 +64,13 @@ exports.create = function(req, res){
 	var multi = client.multi();
 
 	client.incr('yy:sticker:idgen', function(err, reply){
-		if(err) console.error(err);
+		if(err) logger.error(err);
 		id = reply;
-		console.log('id=' + id);
+        logger.info('idgen=' + id);
 
         //sticker key
 		var tztKey = 'yy:sticker:' + id;
-		console.log('sticker Key = ' + tztKey);
+//        logger.info('sticker Key = ' + tztKey);
 
 		multi.set(tztKey, JSON.stringify({
 				id : id,
@@ -77,56 +91,26 @@ exports.create = function(req, res){
 
 		multi.exec(function(err, replies){
 			if(err){
-				console.error(err);
+				logger.error(err);
 			}else{
-				console.info(replies);
+				logger.info('create replies=' + replies);
 				res.json({"result": "0"});
-			}			
-//			client.quit();
+			}
 		});
 	});	
 };
 
 exports.list = function(req, res, next){
 	var cid = req.param('cid');
-    console.info('cid = ' + cid);
+    logger.debug('cid = ' + cid);
 
-//	var client = redis.createClient(port, ip, null);
-
-    //get the sticker ids in the channel
-//	client.lrange("yy:sticker:cid:" + cid, 0, -1, function(err, reply){
-//        if(err) {
-//            return console.error('lrange = ' + err);
-//        }
-//		console.info("yy:sticker:cid:" + cid + "=" + reply);
-//		var multi = client.multi();
-//
-//		for(var i = 0; i < reply.length; i++){
-//			var tztKey = 'yy:sticker:' + reply[i];
-//            //get sticker by id
-//			multi.get(tztKey);
-//		}
-//
-//		multi.exec(function(err, replies){
-//			if(err){
-//				console.error(err);
-//				return;
-//			}
-//			console.info("list = " + replies);
-//			var re = [];
-//			for(var i = 0; i < replies.length; i++){
-//				re.push(JSON.parse(replies[i]));
-//			}
-//			res.send(re);
-//		});
-//	});
 //    pool.acquire(function(err, client) {
     client.sort("yy:sticker:cid:" + cid , 'get',  'yy:sticker:*', function(err, replies){
         if(err){
-            console.error(err);
+            logger.error(err);
             return;
         }
-        console.info("list = " + replies.length);
+        logger.debug("list = " + replies.length);
         var re = [];
         for(var i = 0; i < replies.length; i++){
             re.push(JSON.parse(replies[i]));
@@ -138,23 +122,21 @@ exports.list = function(req, res, next){
 };
 
 exports.delete = function(req, res){
-    console.dir(req.body);
+    logger.info('delete req = ' + util.inspect(req.body));
     var cid = req.param('cid');
     var id = req.param('stickerId');
 
-//    var client = redis.createClient(port, ip, null);
     var multi = client.multi();
     multi.lrem("yy:sticker:cid:" + cid, 0, id);
     multi.del('yy:sticker:' + id);
 
     multi.exec(function(err, replies){
-//        client.quit();
         if(err){
-            console.error(err);
+            logger.error(err);
             res.json({"result": "1", "message" : err});
             return;
         }
-        console.info("delete = " + replies);
+        logger.info("delete = " + replies);
         res.json({"result": "0"});
     });
 };
@@ -164,11 +146,9 @@ exports.delKeys =  function(req, res){
 	client.keys('*', function(err, reply){
 		for(var i=0;i<reply.length;i++){
 //            client.del(reply[i]);
-            console.info('delete key='+reply[i]);
+            logger.info('delete key='+reply[i]);
         }
 
 	});
 	res.send('ok');
 };
-
-

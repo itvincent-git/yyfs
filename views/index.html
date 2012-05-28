@@ -44,14 +44,17 @@ $(function(){
 
     try{
         currentUser = yy.user.getCurrentUserInfo();
-
-        //manager
-        if(currentUser.role >= 150){
+        yy.channel.appMsg.addEventListener(IYYChannelAppMsg.APP_LINK_CLICKED,onLinkClicked);
+        //member
+        if(currentUser.role >= 88){
             yy.channel.userListPopMenu.setPopMenu('贴纸条');
             yy.channel.userListPopMenu.addEventListener(IYYChannelUserListPopMenu.CLICKED,onClicked);
-            yy.channel.appMsg.addEventListener(IYYChannelAppMsg.APP_LINK_CLICKED,onLinkClicked);
-            isManager = true;
             $('.help').show();
+        }
+        //manager
+        if(currentUser.role >= 150){
+            isManager = true;
+
         }
         cid = yy.channel.getCurrentChannelInfo().longId;
 
@@ -73,7 +76,7 @@ $(function(){
             alignY: 'center'
         });
 	}
-//    $.jBox(html, {title:'贴纸条', width: 500,  buttons: {}});
+
 
     function onLinkClicked(eventData)
     {
@@ -85,6 +88,11 @@ $(function(){
 
 	$(".main").delegate('.delete', 'click', function(e){
 		var stickerId = $(this).attr('stickerId');
+        currentUser = yy.user.getCurrentUserInfo();
+        if(currentUser.role < 150){
+            $.jBox.tip('你的不够权限喔，需要红马以上级别才能撕的，要淡定^_^', 'info');
+            return;
+        }
         $.jBox.confirm("确认撕掉这张纸条吗？", "操作提示",function (v, h, f) {
             if (v == 'ok'){
                 $.jBox.tip("正在删除数据...", 'loading');
@@ -125,11 +133,16 @@ $(function(){
     $(document).delegate('.submit', 'click', function(){
         var content = $('.word').val();
         if(content.length > 70){
-            $.jBox.tip('对不起，输入的内容不能超过70个字。', 'error');
+            $.jBox.tip('你写的字太多了，小纸条hold不住咯：俺最多只能写得下70个字T_T', 'error');
             return;
         }
         if(content.length < 1){
             $.jBox.tip('你什么都没写喔……', 'info');
+            return;
+        }
+        currentUser = yy.user.getCurrentUserInfo();
+        if(currentUser.role < 88){
+            $.jBox.tip('你的不够权限喔，需要绿马以上级别才能贴的，要淡定^_^', 'info');
             return;
         }
         try{

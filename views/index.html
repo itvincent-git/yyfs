@@ -93,8 +93,15 @@ $(function(){
 
 	$(".main").delegate('.delete', 'click', function(e){
 		var stickerId = $(this).attr('stickerId');
+        var srcUid = $(this).attr('srcUid');
         currentUser = yy.user.getCurrentUserInfo();
-        if(currentUser.role < 150){
+        var isMySticker = false;
+        //自己贴的纸条可删除
+        if(srcUid == currentUser.uid){
+            isMySticker = true;
+        }
+
+        if(currentUser.role < 150 && !isMySticker){
             $.jBox.tip('你的不够权限喔，需要红马以上级别才能撕的，要淡定^_^', 'info');
             return;
         }
@@ -225,9 +232,14 @@ function listSticker(){
 
             var s = [];
             for(var i = 0; i < data.length; i++){
+                var isMySticker = false;
+                //自己贴的纸条可删除
+                if(data[i].src_uid == currentUser.uid){
+                    isMySticker = true;
+                }
                 s.push('<div class="item big" ptip="', data[i].src_nick + '&nbsp;给&nbsp;',
                     data[i].tar_nick+ '&nbsp;贴的纸条"><div class="bg">',
-                    isManager ? '<a href="#" class="delete" stickerId="'+ data[i].id + '"></a>' : '',
+                    isManager || isMySticker ? '<a href="#" class="delete" srcUid="' + data[i].src_uid+ '" stickerId="'+ data[i].id + '"></a>' : '',
                     data[i].content, '</div></div>');
             }
             $('.list').html(s.join(''));
@@ -239,7 +251,6 @@ function listSticker(){
             });
 
             $('.item').poshytip({
-//                className: 'tip-yellowsimple',
                 className: 'tip-yellow',
                 alignX: 'center',
                 alignY: 'bottom'
@@ -250,6 +261,7 @@ function listSticker(){
                             + '</div><div style="font-weight: normal;word-break: break-all;">' +  content + '</div>';
                 }
             });
+
             $.jBox.closeTip();
 
         }

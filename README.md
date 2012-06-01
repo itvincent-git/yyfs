@@ -1,1 +1,1 @@
-﻿YY贴纸条
+yy sticker

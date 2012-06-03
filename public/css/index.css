@@ -222,19 +222,19 @@ ul, li, dl, dt, dd, form {
 }
 
 .edit_con .btn_con {
-    padding-left: 95px;
+    padding-left: 175px;
 }
 
 .edit_con .submit {
     display: block;
-    width: 114px;
-    height: 35px;
+    width: 94px;
+    height: 32px;
     overflow: hidden;
     background: url(../images/btn.gif) scroll 0 0 no-repeat;
 }
 
 .edit_con a.submit:hover {
-    background: url(../images/btn.gif) scroll 0 -35px no-repeat;
+    background: url(../images/btn.gif) scroll 0 -33px no-repeat;
 }
 
 .content .delete {
@@ -267,3 +267,4 @@ ul, li, dl, dt, dd, form {
 .refresh:hover {
     text-decoration: underline;
 }
+

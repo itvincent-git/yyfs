@@ -121,6 +121,23 @@ exports.list = function(req, res, next){
 //    });
 };
 
+exports.notRemind = function(req, res, next){
+    var uid = req.param('uid');
+    var v = req.param('v');
+    logger.debug('uid = ' + uid + ', v = ' + v);
+
+    client.set('yy:sticker:v:' + uid , v, function(err, replies){
+        if(err){
+            logger.error(err);
+            res.json({"result": "1", "message" : err});
+            return;
+        }
+        logger.info("notRemind version = " + replies);
+        res.json({"result": "0"});
+    });
+
+}
+
 exports.delete = function(req, res){
     logger.info('delete req = ' + util.inspect(req.body));
     var cid = req.param('cid');
@@ -151,4 +168,17 @@ exports.delKeys =  function(req, res){
 
 	});
 	res.send('ok');
+};
+
+exports.userInfo = function(req, res){
+    var uid = req.param('uid');
+    client.get('yy:sticker:v:' + uid, function(err, replies){
+        if(err){
+            logger.error(err);
+            res.json({"result": "1", "message" : err});
+            return;
+        }
+        logger.debug("userInfo uid = " + uid + " info = " + replies);
+        res.json({"v": replies});
+    });
 };

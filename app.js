@@ -45,6 +45,8 @@ app.get('/', routes.index);
 app.post('/list', routes.list);
 app.post('/create', routes.create);
 app.post('/delete', routes.delete);
+app.post('/iknow', routes.notRemind);
+app.post('/user', routes.userInfo);
 
 app.error(function(err, req, res, next){
     res.send(err, 404);

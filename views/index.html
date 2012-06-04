@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../js/jBox/jquery.jBox-2.3.min.js"></script>
 <script type="text/javascript" src="../js/jBox/i18n/jquery.jBox-zh-CN.js"></script>
 <script type="text/javascript">
-var move, cid, currentUser, isManager = false, targetUser, timer, word, list;
+var move, cid, currentUser, isManager = false, targetUser, timer, word, list, ver = 2;
 $(function(){
 	var tips = $('.tips');
     word = $('.word');
@@ -56,12 +56,32 @@ $(function(){
     }catch(e){
     }
 
-    //公告
-    $.jBox.messager('<span style="text-indent: 2em">权限开放了！！！<span style="color:green;">嘉宾【绿马】</span>以上级别都能贴了，你还在等什么……赶紧行动吧!<p>如何贴纸条？请把你的小鼠标移到上面的【帮助】。</p></span>'
-            , '通知'
-            , 5000);
-
     listSticker();
+
+    $.ajax({dataType : 'json', type : 'POST', url : '/user', data : {uid : currentUser.uid}, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        success : function(data){
+            if(data.v < ver){
+                //公告
+                $.jBox.messager('<span style="text-indent: 2em">权限开放了！！！<span style="color:green;">嘉宾【绿马】</span>以上级别都能贴了，你还在等什么……赶紧行动吧!<p>如何贴纸条？请把你的小鼠标移到上面的【帮助】。</p></span>'
+                        , '通知'
+                        , 5000
+                        , { buttons: { '我知道了': true }
+                            ,submit: function (v, h, f) {
+                                $.ajax({dataType : 'json', type : 'POST', url : '/iknow', data : {
+                                    uid : currentUser.uid
+                                    ,v : ver
+                                }, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                                    success : function(data){
+
+                                    }
+                                });
+                                return true;
+                            }
+                        }
+                );
+            }
+        }
+    });
 
 	function onClicked(eventData)
 	{

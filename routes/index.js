@@ -105,7 +105,7 @@ exports.list = function(req, res, next){
     logger.debug('cid = ' + cid);
 
 //    pool.acquire(function(err, client) {
-    client.sort("yy:sticker:cid:" + cid , 'get',  'yy:sticker:*', function(err, replies){
+    client.sort("yy:sticker:cid:" + cid , 'get',  'yy:sticker:*', 'DESC', function(err, replies){
         if(err){
             logger.error(err);
             return;

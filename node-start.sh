@@ -1,1 +1,1 @@
-nohup node app.js &
+nohup ../node/bin/node app.js &

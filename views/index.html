@@ -183,7 +183,9 @@ $(function(){
             cid : cid,
             src_uid : currentUser.uid,
             src_nick : src_nick,
+            src_yy : currentUser.imId,
             tar_uid : targetUser.uid,
+            tar_yy : targetUser.imId,
             tar_nick : $('.name').text()
 
         }, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",

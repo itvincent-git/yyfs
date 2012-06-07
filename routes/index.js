@@ -76,8 +76,10 @@ exports.create = function(req, res){
 				id : id,
 				src_uid : req.param('src_uid'),
 				src_nick : req.param('src_nick'),
+                src_yy : req.param('src_yy'),
 				cid : req.param('cid'),
 				tar_uid: req.param('tar_uid'),
+                tar_yy : req.param('tar_yy'),
 				tar_nick : req.param('tar_nick'),
 				content: req.param('content')
 			}));

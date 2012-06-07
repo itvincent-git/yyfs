@@ -4,7 +4,10 @@
  */
 
 var express = require('express')
-  , routes = require('./routes');
+    , routes = require('./routes')
+    , namespace = require('express-namespace');
+//    , resource = require('express-resource')
+
 
 var app = module.exports = express.createServer();
 
@@ -19,19 +22,20 @@ app.register(".html", require('tenjin'));
 // Configuration
 
 app.configure(function(){
-  app.set('views', __dirname + '/views');
-  //app.set('view engine', 'jade');
-  app.set('view options', {layout: false});
-  //app.set('view engine', 'ejs');
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  //app.use(express.logger());//http日志
-  app.use(express.static(__dirname + '/public'));
+    app.set('views', __dirname + '/views');
+    //app.set('view engine', 'jade');
+    app.set('view options', {layout: false});
+    //app.set('view engine', 'ejs');
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(app.router);
+    app.use('/sticker', express.static(__dirname + '/public'));
+    app.use(express.static(__dirname + '/public'));
+//  app.use(express.logger());//http日志
 });
 
 app.configure('development', function(){
-  //app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
@@ -41,12 +45,21 @@ app.configure('production', function(){
 // Routes
 console.log(routes);
 
+app.namespace('/sticker', function() {
+    app.get('/', routes.index);
+    app.post('list', routes.list);
+    app.post('create', routes.create);
+    app.post('delete', routes.delete);
+    app.post('iknow', routes.notRemind);
+    app.post('user', routes.userInfo);
+});
+
 app.get('/', routes.index);
-app.post('/list', routes.list);
-app.post('/create', routes.create);
-app.post('/delete', routes.delete);
-app.post('/iknow', routes.notRemind);
-app.post('/user', routes.userInfo);
+app.post('list', routes.list);
+app.post('create', routes.create);
+app.post('delete', routes.delete);
+app.post('iknow', routes.notRemind);
+app.post('user', routes.userInfo);
 
 app.error(function(err, req, res, next){
     res.send(err, 404);

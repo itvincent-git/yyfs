@@ -3,18 +3,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>贴纸条</title>
-<link rel="stylesheet" type="text/css" href="../css/jScrollPane.css" />
-<!--<link rel="stylesheet" type="text/css" href="../css/tip-yellow/tip-yellow.css" />-->
-<link rel="stylesheet" type="text/css" href="../css/tip-yellowsimple/tip-yellowsimple.css" />
-<link rel="stylesheet" type="text/css" href="../js/jBox/Skins/Brown/jbox.css"/>
-<link rel="stylesheet" type="text/css" href="../css/index.css" />
-<script type="text/javascript" src="../js/jquery.min.js"></script>
-<script type="text/javascript" src="../js/jquery.mousewheel.js"></script>
-<script type="text/javascript" src="../js/jScrollPane.js"></script>
-<script type="text/javascript" src="../js/jquery.poshytip.min.js"></script>
-<script type="text/javascript" src="../js/yyapi-1.1.js"></script>
-<script type="text/javascript" src="../js/jBox/jquery.jBox-2.3.min.js"></script>
-<script type="text/javascript" src="../js/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<link rel="stylesheet" type="text/css" href="sticker/css/jScrollPane.css" />
+<link rel="stylesheet" type="text/css" href="sticker/css/tip-yellowsimple/tip-yellowsimple.css" />
+<link rel="stylesheet" type="text/css" href="sticker/js/jBox/Skins/Brown/jbox.css"/>
+<link rel="stylesheet" type="text/css" href="sticker/css/index.css" />
+<script type="text/javascript" src="sticker/js/jquery.min.js"></script>
+<script type="text/javascript" src="sticker/js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="sticker/js/jScrollPane.js"></script>
+<script type="text/javascript" src="sticker/js/jquery.poshytip.min.js"></script>
+<script type="text/javascript" src="sticker/js/yyapi-1.1.js"></script>
+<script type="text/javascript" src="sticker/js/jBox/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="sticker/js/jBox/i18n/jquery.jBox-zh-CN.js"></script>
 <script type="text/javascript">
 var move, cid, currentUser, isManager = false, targetUser, timer, word, list, ver = 2;
 $(function(){
@@ -59,7 +58,7 @@ $(function(){
 
     listSticker();
 
-    $.ajax({dataType : 'json', type : 'POST', url : '/user', data : {uid : currentUser.uid}, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+    $.ajax({dataType : 'json', type : 'POST', url : '/sticker/user', data : {uid : currentUser.uid}, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         success : function(data){
             if(data.v < ver){
                 //公告
@@ -68,7 +67,7 @@ $(function(){
                         , 5000
                         , { buttons: { '我知道了': true }
                             ,submit: function (v, h, f) {
-                                $.ajax({dataType : 'json', type : 'POST', url : '/iknow', data : {
+                                $.ajax({dataType : 'json', type : 'POST', url : '/sticker/iknow', data : {
                                     uid : currentUser.uid
                                     ,v : ver
                                 }, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
@@ -124,7 +123,7 @@ $(function(){
         $.jBox.confirm("确认撕掉这张纸条吗？", "操作提示",function (v, h, f) {
             if (v == 'ok'){
                 $.jBox.tip("正在删除数据...", 'loading');
-                $.ajax({dataType : 'json', type : 'POST', url : '/delete', data : {
+                $.ajax({dataType : 'json', type : 'POST', url : '/sticker/delete', data : {
                     cid : cid,
                     stickerId : stickerId
                 }, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
@@ -179,7 +178,7 @@ $(function(){
             var src_nick = '--';
         }
         $.jBox.tip('正在提交数据...', 'loading');
-        $.ajax({dataType : 'json', type : 'POST', url : '/create', data : {
+        $.ajax({dataType : 'json', type : 'POST', url : '/sticker/create', data : {
             content : content,
             cid : cid,
             src_uid : currentUser.uid,
@@ -242,7 +241,7 @@ $(function(){
 function listSticker(){
     $.jBox.close();
     $.jBox.tip('正在获取数据...', 'loading');
-    $.ajax({dataType : 'json', type : 'POST', url : '/list', data : {cid : cid },
+    $.ajax({dataType : 'json', type : 'POST', url : '/sticker/list', data : {cid : cid },
         cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         success : function(data){
 

@@ -5,7 +5,8 @@
 
 var express = require('express')
     , routes = require('./routes')
-    , namespace = require('express-namespace');
+    , namespace = require('express-namespace')
+    , gzippo = require('gzippo');
 //    , resource = require('express-resource')
 
 
@@ -29,8 +30,13 @@ app.configure(function(){
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(app.router);
-    app.use('/sticker', express.static(__dirname + '/public'));
+
+//    var oneHour = 24 * 60 * 60 * 1000;
+//    app.use('/sticker', express.static(__dirname + '/public', { maxAge: oneHour }));
     app.use(express.static(__dirname + '/public'));
+    app.use('/sticker', gzippo.staticGzip(__dirname + '/public'));
+
+//    app.use(connect.compress());
 //  app.use(express.logger());//http日志
 });
 

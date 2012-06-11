@@ -196,7 +196,7 @@ $(function(){
         currentUser = yy.user.getCurrentUserInfo();
 
         if(currentUser.role < 88){
-            $.jBox.tip('你的不够权限喔，需要绿马以上级别才能贴的，要淡定^_^', 'info');
+            $.jBox.tip('你的权限不够喔，需要嘉宾（绿马）以上级别才能贴的，要淡定^_^', 'info');
             return;
         }
 
@@ -269,6 +269,10 @@ $(function(){
     });
 
     $(document).delegate('.tipNick', 'click', function(){
+        if(currentUser.role < 88){
+            $.jBox.tip('你的权限不够喔，需要嘉宾（绿马）以上级别才能贴的，要淡定^_^', 'info');
+            return;
+        }
         var me = $(this);
         var stickerId = me.attr('stickerId');
         var isSource = me.hasClass('source');

@@ -70,17 +70,23 @@ exports.create = function(req, res){
 
         //sticker key
 		var tztKey = 'yy:sticker:' + id;
-//        logger.info('sticker Key = ' + tztKey);
 
 		multi.set(tztKey, JSON.stringify({
 				id : id,
 				src_uid : req.param('src_uid'),
 				src_nick : req.param('src_nick'),
                 src_yy : req.param('src_yy'),
+                sr : req.param('sr'),
+                ss : req.param('ss'),
+                sv : req.param('sv'),
 				cid : req.param('cid'),
 				tar_uid: req.param('tar_uid'),
                 tar_yy : req.param('tar_yy'),
 				tar_nick : req.param('tar_nick'),
+                tr : req.param('tr'),
+                ts : req.param('ts'),
+                tv : req.param('tv'),
+                ct : new Date().getTime(),
 				content: req.param('content')
 			}));
 

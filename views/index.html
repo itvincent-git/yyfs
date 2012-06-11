@@ -6,18 +6,35 @@
 <link rel="stylesheet" type="text/css" href="sticker/css/jScrollPane.css" />
 <link rel="stylesheet" type="text/css" href="sticker/css/tip-yellowsimple/tip-yellowsimple.css" />
 <link rel="stylesheet" type="text/css" href="sticker/js/jBox/Skins/Brown/jbox.css"/>
-<link rel="stylesheet" type="text/css" href="sticker/css/index.css" />
-<script type="text/javascript" src="sticker/js/jquery.min.js"></script>
-<script type="text/javascript" src="sticker/js/jquery.mousewheel.js"></script>
-<script type="text/javascript" src="sticker/js/jScrollPane.js"></script>
+<link rel="stylesheet" type="text/css" href="sticker/css/index.css?v=120610" />
+<script type="text/javascript" src="sticker/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="sticker/js/jquery.mousewheel.min.js"></script>
+<script type="text/javascript" src="sticker/js/jScrollPane.min.js"></script>
 <script type="text/javascript" src="sticker/js/jquery.poshytip.min.js"></script>
-<script type="text/javascript" src="sticker/js/yyapi-1.1.js"></script>
+<script type="text/javascript" src="sticker/js/yyapi-1.1_c036fa0e5b0cfd282d5d25573e33591a.js"></script>
 <script type="text/javascript" src="sticker/js/jBox/jquery.jBox-2.3.min.js"></script>
-<script type="text/javascript" src="sticker/js/jBox/i18n/jquery.jBox-zh-CN.js"></script>
+<script type="text/javascript" src="sticker/js/jBox/i18n/jquery.jBox-zh-CN.min.js"></script>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="banner"></div>
+	<div class="content">
+        <div class="help">
+            <a class="icon" href="javascript:;"></a>
+            <div class="help_tips" id="help_tips"></div>
+        </div>        
+        <a href="javascript:void(0)" class="refresh">刷新</a>        
+        <div class="main" id="main">
+            <div class="list"></div>
+        </div>
+	</div>
+</div>
+</body>
 <script type="text/javascript">
-var move, cid, currentUser, isManager = false, targetUser, timer, word, list, ver = 2;
+var move, cid, currentUser, isManager = false, targetUser, timer, word, list, ver = 3;
 $(function(){
-	var tips = $('.tips');
+    var tips = $('.tips');
     word = $('.word');
     list = $('.list');
     list[0].style.height = ($(window).height() - 115) + 'px';
@@ -34,7 +51,7 @@ $(function(){
         '<div class="clearfix"></div> ',
         '</ul>',
         '<p class="btn_con"><a href="#" class="submit"></a></p>' ,
-        '</div>  ',
+        '</div>'
     ].join('');
 
     try{
@@ -60,20 +77,24 @@ $(function(){
 
     $.ajax({dataType : 'json', type : 'POST', url : '/sticker/user', data : {uid : currentUser.uid}, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         success : function(data){
-            if(data.v < ver){
+            if(data.v < 2){
                 //公告
-                $.jBox.messager('<span style="text-indent: 2em">权限开放了！！！<span style="color:green;">嘉宾【绿马】</span>以上级别都能贴了，你还在等什么……赶紧行动吧!<p>如何贴纸条？请把你的小鼠标移到上面的【帮助】。</p></span>'
-                        , '通知'
-                        , 5000
+                var msg = '<span style="text-indent: 2em">权限开放了！！！<span style="color:green;">嘉宾【绿马】</span>以上级别都能贴了，你还在等什么……赶紧行动吧!<p>如何贴纸条？请把你的小鼠标移到上面的【帮助】。</p></span>';
+                var _ver = 2;
+            }else if(data.v == 2){
+                var msg = '<span style="text-indent: 2em">现在可以通过点击纸条浮出框中的“昵称”贴纸条了</span>';
+                var _ver = 3;
+            }
+            if(msg){
+                $.jBox.messager(msg
+                        , '提示', 5000
                         , { buttons: { '我知道了': true }
                             ,submit: function (v, h, f) {
                                 $.ajax({dataType : 'json', type : 'POST', url : '/sticker/iknow', data : {
                                     uid : currentUser.uid
-                                    ,v : ver
+                                    ,v : _ver
                                 }, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-                                    success : function(data){
-
-                                    }
+                                    success : function(data){}
                                 });
                                 return true;
                             }
@@ -83,11 +104,15 @@ $(function(){
         }
     });
 
-	function onClicked(eventData)
-	{
+    function onClicked(eventData)
+    {
         targetUser = yy.user.getUserInfo(eventData.uid);
+        open();
+    }
+
+    function open(){
         $.jBox(html, {title:'贴纸条', width: 500,  buttons: {}});
-		$('.name').text(targetUser.name);
+        $('.name').text(targetUser.name);
         $('.word').poshytip({
             alignTo: 'target',
             showOn: 'focus',
@@ -95,7 +120,7 @@ $(function(){
             alignX: 'right',
             alignY: 'center'
         });
-	}
+    }
 
 
     function onLinkClicked(eventData)
@@ -106,8 +131,8 @@ $(function(){
     }
 
 
-	$(".main").delegate('.delete', 'click', function(e){
-		var stickerId = $(this).attr('stickerId');
+    $(".main").delegate('.delete', 'click', function(e){
+        var stickerId = $(this).attr('stickerId');
         var srcUid = $(this).attr('srcUid');
         currentUser = yy.user.getCurrentUserInfo();
         var isMySticker = false;
@@ -143,7 +168,7 @@ $(function(){
             }
             return true;
         });
-	});
+    });
 
     $(window).resize(function(e){
         if(timer) clearTimeout(timer);
@@ -167,39 +192,43 @@ $(function(){
             $.jBox.tip('你什么都没写喔……', 'info');
             return;
         }
+
         currentUser = yy.user.getCurrentUserInfo();
+
         if(currentUser.role < 88){
             $.jBox.tip('你的不够权限喔，需要绿马以上级别才能贴的，要淡定^_^', 'info');
             return;
         }
-        try{
-            var src_nick = currentUser.name;
-        }catch(e){
-            var src_nick = '--';
-        }
+
         $.jBox.tip('正在提交数据...', 'loading');
         $.ajax({dataType : 'json', type : 'POST', url : '/sticker/create', data : {
             content : content,
             cid : cid,
             src_uid : currentUser.uid,
-            src_nick : src_nick,
+            src_nick : currentUser.name,
             src_yy : currentUser.imId,
+            sr : currentUser.role,
+            ss : currentUser.sex,
+            sv : currentUser.vip,
             tar_uid : targetUser.uid,
             tar_yy : targetUser.imId,
-            tar_nick : $('.name').text()
-
+            tar_nick : targetUser.name,
+            tr : targetUser.role,
+            ts : targetUser.sex,
+            tv : targetUser.vip
         }, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             success : function(data){
                 if(data.result == 0){
 
-                    listSticker();
-
                     try{
                         //send message to the target user
                         yy.channel.appMsg.sendMsgToUsers([targetUser.uid], "您被偷偷的贴了一张纸条", 0, 10, 1);
+                        var subChannel = yy.channel.getCurrentSubChannelInfo();
+                        yy.channel.appMsg.sendMsgToSubChannel(subChannel.longId, "有人贴了一张纸条，赶紧去围观", 0, 13, 1)
                     }catch(e){
-
                     }
+
+                    listSticker();
                 }else{
                     if(data.result == 60002){
                         $.jBox.error('请输入你想说的话');
@@ -238,6 +267,35 @@ $(function(){
         }
 
     });
+
+    $(document).delegate('.tipNick', 'click', function(){
+        var me = $(this);
+        var stickerId = me.attr('stickerId');
+        var isSource = me.hasClass('source');
+        var item = $('.item[stickerId="' + stickerId+ '"]');
+        item.poshytip('hide');
+        var tipData = item.data('tipData');
+        if(isSource){
+
+            targetUser = {};
+            targetUser.uid = tipData.src_uid;
+            targetUser.name = tipData.src_nick;
+            targetUser.imId = tipData.src_yy;
+            targetUser.role = tipData.sr;
+            targetUser.vip = tipData.sv;
+            targetUser.sex = tipData.ss;
+        }else{
+            targetUser = {};
+            targetUser.uid = tipData.tar_uid;
+            targetUser.name = tipData.tar_nick;
+            targetUser.imId = tipData.tar_yy;
+            targetUser.role = tipData.tr;
+            targetUser.vip = tipData.tv;
+            targetUser.sex = tipData.ts;
+        }
+
+        open();
+    });
 });
 
 function listSticker(){
@@ -254,16 +312,16 @@ function listSticker(){
                 if(data[i].src_uid == currentUser.uid){
                     isMySticker = true;
                 }
-                s.push('<div class="item big" ptip="', data[i].src_nick + '&nbsp;给&nbsp;',
-                    data[i].tar_nick+ '&nbsp;贴的纸条"><div class="bg">',
-                    isManager || isMySticker ? '<a href="#" class="delete" srcUid="' + data[i].src_uid+ '" stickerId="'+ data[i].id + '"></a>' : '',
-                    data[i].content, '</div></div>');
+                s.push('<div class="item big" stickerId="', data[i].id , '"><div class="bg">',
+                        isManager || isMySticker ? '<a href="#" class="delete" srcUid="' + data[i].src_uid+ '" stickerId="'+ data[i].id + '"></a>' : '',
+                        data[i].content, '</div></div>');
             }
             $('.list').html(s.join(''));
             $('.list').show();
             $('.list').jScrollPane({showArrows:false, scrollbarWidth:10, arrowSize:0});
 
             $('.item').each(function(index){
+                $(this).data('tipData', data[index]);
                 fixFont(this);
             });
 
@@ -272,9 +330,11 @@ function listSticker(){
                 alignX: 'center',
                 alignY: 'bottom'
                 ,content : function(){
-                    var title = $(this).attr('ptip');
-                    var content = $(this).text();
-                    return '<div style="color: #8C3901; border-bottom: 1px solid gray;">' + title
+                    var me = $(this);
+                    var content = me.text();
+                    var tipData = me.data('tipData');
+                    var title = '<ul><li><span style="color: grey">From</span>&nbsp;:&nbsp;<span class="tipNick source" stickerId=' + tipData.id + '>' + arrowFilter(tipData.src_nick) + '</span></li><li><span style="text-indent: 15px;color: grey">To</span>&nbsp;:&nbsp;<span class="tipNick target" stickerId=' + tipData.id + '>' + arrowFilter(tipData.tar_nick) + '</span></li></ul>';
+                    return '<div style="color: #8C3901; border-bottom: 1px solid gray;padding-bottom: 3px">' + title
                             + '</div><div style="font-weight: normal;word-break: break-all;">' +  content + '</div>';
                 }
             });
@@ -308,28 +368,6 @@ function fixFont(divObj){
     divObj.style.fontSize = rfont + "px";
 }
 
-function fixFont1(divObj){
-	var fontw=12;//parseInt(divObj.style.fontSize);
-	var fonth=fontw+2;//初始字体高度
-	var width=110;//str.offsetWidth DIV的宽度
-	var height=95;//divObj.offsetHeight;//div的高度
-	var lenstr=$(divObj).text().length;//getLength($(divObj).text());//DIV里文字长度
-	// console.debug(lenstr);
-    if(lenstr <= 0) return;
-	fonts=fontw*fonth*lenstr;//字体面积
-	divs=width*height;//DIV面积
-	//  console.debug(fontw + ',' + fonth + ',' + lenstr+ ',' + fonts + ',' + divs);
-    var rfont;//重设字体大小为rfont
-    if(lenstr <= 6){
-        rfont=Math.round((Math.sqrt(4*lenstr*divs-4*lenstr*lenstr)-2*lenstr)/(2*lenstr) * 0.6);
-        divObj.style.fontSize=rfont+"px";
-        return;
-    }
-	rfont=Math.round((Math.sqrt(4*lenstr*divs-4*lenstr*lenstr)-2*lenstr)/(2*lenstr));
-	divObj.style.fontSize=rfont+"px";
-
-}
-
 function getLength(str) {
     var len = str.length;
     var reLen = 0;
@@ -344,23 +382,13 @@ function getLength(str) {
     }
     return reLen;
 }
+
+String.prototype.replaceAll  = function(s1,s2){
+    return this.replace(new RegExp(s1,"gm"),s2);
+}
+
+function arrowFilter(s){
+    return s.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+}
 </script>
-</head>
-
-<body>
-<div class="wrap">
-    <div class="banner"></div>
-	<div class="content">
-        <div class="help">
-            <a class="icon" href="javascript:;"></a>
-            <div class="help_tips" id="help_tips"></div>
-        </div>
-        <a href="javascript:void(0)" class="refresh">刷新</a>
-		<div class="main" id="main">
-            <div class="list"></div>
-        </div>
-	</div>
-</div>
-
-</body>
 </html>

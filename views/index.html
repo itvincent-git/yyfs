@@ -4,9 +4,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>贴纸条</title>
 <link rel="stylesheet" type="text/css" href="sticker/css/jScrollPane.css" />
-<link rel="stylesheet" type="text/css" href="sticker/css/tip-yellowsimple/tip-yellowsimple.css?v=120610" />
+<link rel="stylesheet" type="text/css" href="sticker/css/tip-yellowsimple/tip-yellowsimple.css?v=120612" />
 <link rel="stylesheet" type="text/css" href="sticker/js/jBox/Skins/Brown/jbox.css"/>
-<link rel="stylesheet" type="text/css" href="sticker/css/index.css?v=120610" />
+<link rel="stylesheet" type="text/css" href="sticker/css/index.css?v=120612" />
 <script type="text/javascript" src="sticker/js/jquery-1.4.4.min.js"></script>
 <script type="text/javascript" src="sticker/js/jquery.mousewheel.min.js"></script>
 <script type="text/javascript" src="sticker/js/jScrollPane.min.js"></script>
@@ -268,14 +268,14 @@ $(function(){
 
     });
 
-    $(document).delegate('.tipNick', 'click', function(){
+    $(document).delegate('.tipname', 'click', function(){
         if(currentUser.role < 88){
             $.jBox.tip('你的权限不够喔，需要嘉宾（绿马）以上级别才能贴的，要淡定^_^', 'info');
             return;
         }
         var me = $(this);
         var stickerId = me.attr('stickerId');
-        var isSource = me.hasClass('source');
+        var isSource = me.hasClass('from');
         var item = $('.item[stickerId="' + stickerId+ '"]');
         item.poshytip('hide');
         var tipData = item.data('tipData');
@@ -333,13 +333,18 @@ function listSticker(){
                 className: 'tip-yellowsimple',
                 alignX: 'center',
                 alignY: 'bottom'
+                ,alignTo: 'target'
+                ,offsetX: 0
+                ,offsetY: -20
                 ,content : function(){
                     var me = $(this);
                     var content = me.text();
                     var tipData = me.data('tipData');
-                    var title = '<ul><li><span style="color: grey">From</span>&nbsp;:&nbsp;<span class="tipNick source" stickerId=' + tipData.id + '>' + arrowFilter(tipData.src_nick) + '</span></li><li><span style="text-indent: 15px;color: grey">To</span>&nbsp;:&nbsp;<span class="tipNick target" stickerId=' + tipData.id + '>' + arrowFilter(tipData.tar_nick) + '</span></li></ul>';
-                    return '<div style="color: #8C3901; border-bottom: 1px solid gray;padding-bottom: 3px">' + title
-                            + '</div><div style="font-weight: normal;word-break: break-all;">' +  content + '</div>';
+//                    var title = '<ul><li><span style="color: grey">From：</span><span class="tipNick source" stickerId=' + tipData.id + '>' + arrowFilter(tipData.src_nick) + '</span></li><li><span style="text-indent: 15px;color: grey">To：</span><span class="tipNick target" stickerId=' + tipData.id + '>' + arrowFilter(tipData.tar_nick) + '</span></li></ul>';
+                    var title = '<p class="tipname from" stickerId="' + tipData.id + '">：' + arrowFilter(tipData.src_nick) + '</p>' +
+                            '<p class="tipname to" stickerId="' + tipData.id + '">：' + arrowFilter(tipData.tar_nick) + '</p>';
+                    return '<div>' + title
+                            + '</div><div class="tipcon" style="font-weight: normal;word-break: break-all;padding-top: 3px">' +  content + '</div>';
                 }
             });
 

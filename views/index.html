@@ -318,7 +318,7 @@ function listSticker(){
                 }
                 s.push('<div class="item big" stickerId="', data[i].id , '"><div class="bg">',
                         isManager || isMySticker ? '<a href="#" class="delete" srcUid="' + data[i].src_uid+ '" stickerId="'+ data[i].id + '"></a>' : '',
-                        data[i].content, '</div></div>');
+                        arrowFilter(data[i].content), '</div></div>');
             }
             $('.list').html(s.join(''));
             $('.list').show();
@@ -344,7 +344,7 @@ function listSticker(){
                     var title = '<p class="tipname from" stickerId="' + tipData.id + '">：' + arrowFilter(tipData.src_nick) + '</p>' +
                             '<p class="tipname to" stickerId="' + tipData.id + '">：' + arrowFilter(tipData.tar_nick) + '</p>';
                     return '<div>' + title
-                            + '</div><div class="tipcon" style="font-weight: normal;word-break: break-all;padding-top: 3px">' +  content + '</div>';
+                            + '</div><div class="tipcon" style="font-weight: normal;word-break: break-all;padding-top: 3px">' +  arrowFilter(content) + '</div>';
                 }
             });
 

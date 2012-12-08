@@ -11,7 +11,8 @@
 <script type="text/javascript" src="sticker/js/jquery.mousewheel.min.js"></script>
 <script type="text/javascript" src="sticker/js/jScrollPane.min.js"></script>
 <script type="text/javascript" src="sticker/js/jquery.poshytip.min.js"></script>
-<script type="text/javascript" src="sticker/js/yyapi-1.1_c036fa0e5b0cfd282d5d25573e33591a.js"></script>
+<!--<script type="text/javascript" src="sticker/js/yyapi-1.1_c036fa0e5b0cfd282d5d25573e33591a.js"></script>-->
+<script type="text/javascript" src="sticker/js/yyapi-1.6beta.min.js"></script>
 <script type="text/javascript" src="sticker/js/jBox/jquery.jBox-2.3.min.js"></script>
 <script type="text/javascript" src="sticker/js/jBox/i18n/jquery.jBox-zh-CN.min.js"></script>
 </head>
@@ -107,6 +108,7 @@ $(function(){
     function onClicked(eventData)
     {
         targetUser = yy.user.getUserInfo(eventData.uid);
+        yy.channel.tabPage.selectTabPage();
         open();
     }
 
@@ -125,6 +127,7 @@ $(function(){
 
     function onLinkClicked(eventData)
     {
+        yy.channel.tabPage.selectTabPage();
         if(eventData.token == 1){
             listSticker();
         }

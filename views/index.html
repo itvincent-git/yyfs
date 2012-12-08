@@ -222,14 +222,15 @@ $(function(){
         }, cache : false, timeout : 10000, contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             success : function(data){
                 if(data.result == 0){
+                    setTimeout(function(){
+                        try{
+                            //send message to the target user
+                            yy.channel.appMsg.sendMsgToUsers([targetUser.uid], "您被偷偷的贴了一张纸条", 0, 10, 1);
+                            var subChannel = yy.channel.getCurrentSubChannelInfo();
+                            yy.channel.appMsg.sendMsgToSubChannel(subChannel.longId, "有人贴了一张纸条，赶紧去围观", 0, 13, 1)
+                        }catch(e){}
+                    }, 1);
 
-                    try{
-                        //send message to the target user
-                        yy.channel.appMsg.sendMsgToUsers([targetUser.uid], "您被偷偷的贴了一张纸条", 0, 10, 1);
-                        var subChannel = yy.channel.getCurrentSubChannelInfo();
-                        yy.channel.appMsg.sendMsgToSubChannel(subChannel.longId, "有人贴了一张纸条，赶紧去围观", 0, 13, 1)
-                    }catch(e){
-                    }
 
                     listSticker();
                 }else{
